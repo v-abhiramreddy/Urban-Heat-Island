@@ -28,10 +28,17 @@ import base64
 
 
 def get_base64_image(image_path):
-    """Reads a local image and returns its base64-encoded string."""
+    """Reads a local image and returns its base64-encoded string, with fallback to root directory."""
     try:
-        if os.path.exists(image_path):
-            with open(image_path, "rb") as image_file:
+        p = Path(image_path)
+        # Check primary path (e.g. assets/image.png)
+        if p.exists():
+            with open(p, "rb") as image_file:
+                return base64.b64encode(image_file.read()).decode("utf-8")
+        # Check fallback path: directly in root (same folder as app.py)
+        fallback_p = Path(__file__).parent / p.name
+        if fallback_p.exists():
+            with open(fallback_p, "rb") as image_file:
                 return base64.b64encode(image_file.read()).decode("utf-8")
     except Exception:
         pass
