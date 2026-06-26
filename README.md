@@ -124,16 +124,18 @@ uhi_trend_hyderabad.csv / _meta.json
 uhi_trend_delhi.csv / _meta.json
 uhi_trend_mumbai.csv / _meta.json
 uhi_trend_chennai.csv / _meta.json
-assets/ (folder containing UI images)
+assets/ (folder containing UI images) OR place the images directly in the root directory
 ```
 
 ---
 
 ## 📁 Repository Structure
 ```
-├── assets/                       # Background/Capsule image assets
+├── assets/                       # Background/Capsule image assets (Optional - can also place images directly in root)
 ├── app.py                        # Streamlit dashboard
 ├── FINALISRO.ipynb               # GEE data pipeline + model training
+├── multi_city_data.csv           # Combined raw training dataset
+├── data_*.csv                    # Individual city raw training datasets
 ├── xgb_model.pkl                 # Trained XGBoost model
 ├── scaler.pkl                    # StandardScaler (spectral features only)
 ├── model_metadata.pkl/json       # Feature stats, city encodings, metrics
