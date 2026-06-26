@@ -3,7 +3,7 @@
 
 A geospatial AI/ML system that identifies urban heat stress hotspots, quantifies key drivers of urban heating, and generates optimized scenario-based cooling interventions — backed by physics-informed decision-making.
 
-**Live Demo:** []
+**Live Demo:** [https://urban-heat-island-spfvstymdsbq5zocoqb8bu.streamlit.app]
 
 ---
 
