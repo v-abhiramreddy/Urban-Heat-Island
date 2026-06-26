@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Local Streamlit config / cache files
+.streamlit/
+.streamlit/config.toml
+
+# Recovered / temporary / debug files
+*.recovered
+dom_dump.html
+
+# Raw/Intermediate Data Files (not needed by the Streamlit App)
+multi_city_data.csv
+data_hyderabad.csv
+data_delhi.csv
+data_mumbai.csv
+data_chennai.csv
+uhi_trend.csv
+uhi_trend_meta.json
+uhi_trend.png
+
+# Jupyter Notebook source code (optional to ignore, but usually kept in dev branch)
+# If you want to push your Jupyter notebooks, you can comment these lines out
+# ISRO.ipynb
+# FINALISRO.ipynb
+
+# Local python scripts used for one-off training/fixing
+ISRO_fixed_cells.py
+pinn_training_fixed.py
+commands to run locally.txt
