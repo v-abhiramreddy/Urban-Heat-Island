@@ -1330,7 +1330,7 @@ def main():
     <div class="spacenas-hero">
         <h1 class="hero-title">
             Discover <span class="capsule-img" style="background-image: url(data:image/png;base64,{thermal_earth_b64});">heat signatures</span> from space<br>
-            beyond <span class="orange-highlight">visible light</span> <span class="capsule-img capsule-img-2" style="background-image: url(data:image/png;base64,{satellite_view_b64});"></span>
+            beyond <span class="orange-highlight">visible light</span>
         </h1>
         <p class="hero-subtitle" style="text-align: center !important; margin: 1.2rem auto 0 auto; max-width: 650px;">Simulate urban microclimates and predict surface temperatures using satellite observations & physics-informed AI</p>
     </div>
