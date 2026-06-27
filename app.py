@@ -1867,8 +1867,8 @@ def render_predictor_tab(ctx, model, scaler, metadata):
                 risk_intensity = 0.6 * ga_intensity + 0.4 * pop_norm
 
                 vm = folium.Map(location=center, zoom_start=city_data['zoom'], tiles=None, control_scale=True)
-                folium.TileLayer("https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png", attr='&copy; CARTO', name="Dark").add_to(vm)
-                folium.TileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}", attr="Esri", name="Satellite").add_to(vm)
+                folium.TileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", attr='&copy; CARTO', name="Dark").add_to(vm)
+                folium.TileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", attr="Esri", name="Satellite").add_to(vm)
                 
                 heat_data = [[float(ga_lats[i]), float(ga_lons[i]), float(ga_intensity[i])] for i in range(len(ga_lats))]
                 HeatMap(heat_data, name="UHI Heatmap", min_opacity=0.35, max_zoom=15, radius=18, blur=22,
