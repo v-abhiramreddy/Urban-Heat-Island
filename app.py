@@ -321,6 +321,7 @@ section[data-testid="stSidebar"] button[kind="headerNoPadding"] * {
     box-shadow: inset 0 0 20px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.5);
     margin: 0 0.4rem;
     border: 1px solid rgba(255, 255, 255, 0.12);
+    white-space: nowrap;
 }
 .capsule-img-2 {
     width: 120px;
@@ -760,6 +761,31 @@ div[data-testid="stTabBar"] {
     margin-top: 2.5rem !important;
     color: var(--text-secondary) !important;
     opacity: 0.6 !important;
+}
+
+/* Responsive adjustments for mobile screens */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: clamp(1.4rem, 6vw, 2.2rem) !important;
+        line-height: 1.45 !important;
+        letter-spacing: -0.02em !important;
+    }
+    .capsule-img {
+        height: 38px !important;
+        line-height: 38px !important;
+        font-size: 1rem !important;
+        padding: 0 1.1rem !important;
+        margin: 0.15rem 0.2rem !important;
+        border-radius: 20px !important;
+    }
+    .capsule-img-2 {
+        display: none !important;
+    }
+    .hero-subtitle {
+        font-size: 0.9rem !important;
+        line-height: 1.5 !important;
+        padding: 0 1rem !important;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
