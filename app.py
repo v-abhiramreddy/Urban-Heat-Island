@@ -1822,11 +1822,17 @@ def render_predictor_tab(ctx, model, scaler, metadata):
 
             st.markdown(f"""
             <div class="city-info-banner">
-                <span style="font-size: 2.5rem;">\U0001F4CD</span>
-                <div class="city-info-text">
-                    <strong>Custom Location</strong> &nbsp;·&nbsp;
-                    <span style="color: {within_color}; font-weight: 600;">{within_text}</span><br>
-                    {region_text}
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <span style="font-size: 2.5rem; line-height: 1;">📍</span>
+                    <div class="city-info-text" style="flex: 1;">
+                        <strong>Custom Location</strong> &nbsp;·&nbsp;
+                        <span style="color: {within_color}; font-weight: 600;">{within_text}</span><br>
+                        <span style="font-size: 0.88rem; color: #cbd5e1;">{region_text}</span>
+                    </div>
+                </div>
+                <div style="margin-top: 0.8rem; padding-top: 0.6rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.82rem; color: #94a3b8; display: flex; align-items: center; gap: 0.4rem;">
+                    <span>ℹ️</span>
+                    <span>Custom coordinate analysis operates as a point-based prediction. Regional UHI heatmaps and population vulnerability overlays are optimized for preset cities with pre-compiled spatial grids.</span>
                 </div>
             </div>
             """, unsafe_allow_html=True)
