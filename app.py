@@ -1314,13 +1314,14 @@ def main():
     forest_satellite_b64 = get_base64_image(assets_dir / "forest_satellite.png")
     cool_roofs_satellite_b64 = get_base64_image(assets_dir / "cool_roofs_satellite.png")
     water_satellite_b64 = get_base64_image(assets_dir / "water_satellite.png")
+    isro_logo_b64 = get_base64_image(assets_dir / "isro_logo.svg")
 
     # ── Hackathon Branding (Top Left Corner) ─────────────────────────────────
-    st.markdown("""
+    st.markdown(f"""
 <div style="display:flex; align-items:center; gap:16px; 
 padding:8px 0 16px 0; border-bottom:1px solid rgba(255,255,255,0.08); 
 margin-bottom:16px;">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Indian_Space_Research_Organisation_Logo.svg/200px-Indian_Space_Research_Organisation_Logo.svg.png" 
+    <img src="data:image/svg+xml;base64,{isro_logo_b64}" 
          height="48" style="object-fit:contain;"/>
     <div style="width:1px;height:38px;background:rgba(255,255,255,0.15);"></div>
     <span style="font-family: 'Outfit', sans-serif; color:#cbd5e1; line-height:1.4;">
