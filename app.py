@@ -1315,6 +1315,21 @@ def main():
     cool_roofs_satellite_b64 = get_base64_image(assets_dir / "cool_roofs_satellite.png")
     water_satellite_b64 = get_base64_image(assets_dir / "water_satellite.png")
 
+    # ── Hackathon Branding (Top Left Corner) ─────────────────────────────────
+    st.markdown("""
+<div style="display:flex; align-items:center; gap:16px; 
+padding:8px 0 16px 0; border-bottom:1px solid rgba(255,255,255,0.08); 
+margin-bottom:16px;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Indian_Space_Research_Organisation_Logo.svg/200px-Indian_Space_Research_Organisation_Logo.svg.png" 
+         height="48" style="object-fit:contain;"/>
+    <div style="width:1px;height:38px;background:rgba(255,255,255,0.15);"></div>
+    <span style="font-family: 'Outfit', sans-serif; color:#cbd5e1; line-height:1.4;">
+        <strong style="color:#FF9933; font-size:1.15rem; font-weight:800; display:block; margin-bottom:2px; letter-spacing:0.5px;">Bharatiya Antariksh Hackathon 2026</strong>
+        <span style="font-size:13px; color:#94a3b8; font-weight:500;">Problem Statement — Urban Heat Mitigation via AI/ML</span>
+    </span>
+</div>
+""", unsafe_allow_html=True)
+
     # ── Custom Header ────────────────────────────────────────────────────────
     st.markdown(f"""
     <div class="spacenas-header">
@@ -1324,20 +1339,6 @@ def main():
         </div>
     </div>
     """, unsafe_allow_html=True)
-
-    st.markdown("""
-<div style="display:flex; align-items:center; gap:16px; 
-padding:8px 0 16px 0; border-bottom:1px solid #2a2a3a; 
-margin-bottom:16px;">
-    <img src="https://www.isro.gov.in/sites/default/files/isro_0.png" 
-         height="40" style="object-fit:contain;"/>
-    <div style="width:1px;height:36px;background:#333;"></div>
-    <span style="font-size:12px;color:#8a95b0;line-height:1.4;">
-        <strong style="color:#FF6B00;">Bharatiya Antariksh Hackathon 2026</strong><br>
-        Problem Statement 7 — Urban Heat Mitigation via AI/ML
-    </span>
-</div>
-""", unsafe_allow_html=True)
 
     # ── Spacenas-Style Hero Header ───────────────────────────────────────
     st.markdown(f"""
