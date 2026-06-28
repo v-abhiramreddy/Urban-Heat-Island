@@ -1071,23 +1071,41 @@ def build_city_map(city_name, _model, _scaler, _metadata):
         spot_heat_stress = compute_heat_stress(spot_lst, mean_air_temp)
         spot_heat_stress_label, spot_heat_stress_icon, _ = get_heat_stress_class(spot_heat_stress)
         pct = int(spot_intensity * 100)
-        color = "red" if spot_intensity > 0.85 else "orange" if spot_intensity > 0.7 else "yellow"
+        
+        # Customize first 3 hotspots as Priority Intervention Zones
+        if rank == 0:
+            title = "🎯 Priority Intervention Zone #1"
+            action = "🌲 Recommendation: Plant Trees First"
+            color = "#ef4444" # Red
+        elif rank == 1:
+            title = "🎯 Priority Intervention Zone #2"
+            action = "🏠 Recommendation: Cool Roof Candidate"
+            color = "#f97316" # Orange
+        elif rank == 2:
+            title = "🎯 Priority Intervention Zone #3"
+            action = "💧 Recommendation: Water Body Restoration"
+            color = "#3b82f6" # Blue
+        else:
+            title = f"🔥 Hotspot #{rank+1}"
+            action = "Monitor temperature levels"
+            color = "#eab308" # Yellow
+            
         folium.CircleMarker(
             location=[spot_lat, spot_lon],
-            radius=8,
+            radius=9,
             color=color,
             fill=True,
             fill_color=color,
-            fill_opacity=0.8,
+            fill_opacity=0.9,
             popup=(
-                f"<b>Hotspot #{rank+1}</b><br>"
+                f"<b>{title}</b><br>"
+                f"<b>{action}</b><br><br>"
                 f"Predicted LST: {spot_lst:.1f}°C<br>"
                 f"Heat Stress Index: {spot_heat_stress:.1f}°C {spot_heat_stress_icon} {spot_heat_stress_label}<br>"
-                f"Intensity: {pct}%<br>"
                 f"Lat: {spot_lat:.4f}<br>"
                 f"Lon: {spot_lon:.4f}"
             ),
-            tooltip=f"🔥 #{rank+1} — LST {spot_lst:.1f}°C | Heat Stress Index {spot_heat_stress:.1f}°C {spot_heat_stress_icon}",
+            tooltip=f"{title} — LST {spot_lst:.1f}°C | {action}",
         ).add_to(m)
 
     folium.LayerControl(collapsed=False).add_to(m)
@@ -2137,6 +2155,47 @@ def render_predictor_tab(ctx, model, scaler, metadata):
                 vuln_data = [[float(ga_lats[i]), float(ga_lons[i]), float(risk_intensity[i])] for i in range(len(ga_lats))]
                 HeatMap(vuln_data, name="Vulnerability", min_opacity=0.4, max_zoom=15, radius=20, blur=24,
                         gradient={0.2:"#312e81",0.4:"#6d28d9",0.6:"#a855f7",0.75:"#f472b6",0.9:"#fb7185",1.0:"#ef4444"}).add_to(vm)
+                # Add priority intervention zone markers to vulnerability map
+                ga_lsts = np.array(ga['predicted_lst'])
+                top3_indices = np.argsort(ga_lsts)[-3:][::-1]
+                for rank, idx in enumerate(top3_indices):
+                    spot_lat = float(ga_lats[idx])
+                    spot_lon = float(ga_lons[idx])
+                    spot_lst = float(ga_lsts[idx])
+                    spot_heat_stress = compute_heat_stress(spot_lst, air_temp_val)
+                    spot_heat_stress_label, spot_heat_stress_icon, _ = get_heat_stress_class(spot_heat_stress)
+                    
+                    if rank == 0:
+                        title = "🎯 Priority Intervention Zone #1"
+                        action = "🌲 Recommendation: Plant Trees First"
+                        color = "#ef4444"
+                    elif rank == 1:
+                        title = "🎯 Priority Intervention Zone #2"
+                        action = "🏠 Recommendation: Cool Roof Candidate"
+                        color = "#f97316"
+                    else:
+                        title = "🎯 Priority Intervention Zone #3"
+                        action = "💧 Recommendation: Water Body Restoration"
+                        color = "#3b82f6"
+                        
+                    folium.CircleMarker(
+                        location=[spot_lat, spot_lon],
+                        radius=9,
+                        color=color,
+                        fill=True,
+                        fill_color=color,
+                        fill_opacity=0.9,
+                        popup=(
+                            f"<b>{title}</b><br>"
+                            f"<b>{action}</b><br><br>"
+                            f"Predicted LST: {spot_lst:.1f}°C<br>"
+                            f"Heat Stress Index: {spot_heat_stress:.1f}°C {spot_heat_stress_icon} {spot_heat_stress_label}<br>"
+                            f"Lat: {spot_lat:.4f}<br>"
+                            f"Lon: {spot_lon:.4f}"
+                        ),
+                        tooltip=f"{title} — LST {spot_lst:.1f}°C | {action}",
+                    ).add_to(vm)
+
                 folium.LayerControl().add_to(vm)
                 city_map_html = vm._repr_html_()
 
@@ -2217,11 +2276,11 @@ def render_predictor_tab(ctx, model, scaler, metadata):
                 
                 with col:
                     st.markdown(f"""
-                    <div class="metric-card" style="border-top: 3px solid #FF9933;">
-                        <div style="font-size: 0.85rem; font-weight: 700; color: #FF9933; margin-bottom: 0.3rem;">Zone {i+1}</div>
-                        <div style="font-size: 1.6rem; font-weight: 800; color: #f1f5f9; margin-bottom: 0.2rem;">{lst_val:.1f}°C</div>
-                        <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.8rem; font-family: monospace;">{lat_val:.4f}°N, {lon_val:.4f}°E</div>
-                        <div style="font-size: 0.82rem; color: #cbd5e1; font-weight: 600; line-height: 1.35;">{interventions[i]}</div>
+                    <div class="metric-card" style="border-top: 3.5px solid #FF9933; padding: 1.25rem 1rem;">
+                        <div style="font-size: 1.05rem; font-weight: 800; color: #FF9933; margin-bottom: 0.4rem; letter-spacing: 0.5px;">Zone {i+1}</div>
+                        <div style="font-size: 2.1rem; font-weight: 800; color: #ffffff; margin-bottom: 0.3rem; font-family: 'Syne', sans-serif;">{lst_val:.1f}°C</div>
+                        <div style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 1rem; font-family: monospace; font-weight: 500;">{lat_val:.4f}°N, {lon_val:.4f}°E</div>
+                        <div style="font-size: 0.95rem; color: #ffffff; font-weight: 700; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.8rem;">{interventions[i]}</div>
                     </div>
                     """, unsafe_allow_html=True)
 
