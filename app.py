@@ -1415,6 +1415,108 @@ research purposes. Field validation is recommended before policy action.
     return report
 
 
+def render_city_comparison(model, scaler, metadata, explainer, feature_cols, city_encoding, city_feature_stats, stats):
+    st.markdown("---")
+    st.markdown('<div class="section-header">🏙️ Cross-City Comparative Analysis</div>', unsafe_allow_html=True)
+    st.markdown('<p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 1.5rem;">A side-by-side comparison of baseline urban microclimate conditions, key heating drivers, and historical warming rates across the 4 primary cities.</p>', unsafe_allow_html=True)
+
+    cities = ['Hyderabad', 'Delhi', 'Mumbai', 'Chennai']
+    comparison_data = []
+    
+    for city_name in cities:
+        # Get mean feature inputs for the city
+        input_values = {}
+        SPECTRAL_COLS = ['NDVI', 'NDWI', 'NDBI', 'Albedo', 'MNDWI']
+        for col in feature_cols:
+            if col == 'city_encoded':
+                continue
+            city_mean = city_feature_stats.get(city_name, {}).get(col, {}).get('mean', stats.get(col, {}).get('mean', 0.0))
+            input_values[col] = float(city_mean)
+            
+        city_code = city_encoding.get(city_name, 0)
+        input_values['city_encoded'] = city_code
+        
+        # Scale and predict
+        input_df = pd.DataFrame([input_values], columns=feature_cols)
+        spectral_scaled = pd.DataFrame(
+            scaler.transform(input_df[SPECTRAL_COLS]),
+            columns=SPECTRAL_COLS
+        )
+        spectral_scaled['city_encoded'] = input_df['city_encoded'].values
+        predicted_lst = float(model.predict(spectral_scaled[feature_cols])[0])
+        
+        # Get Heat Risk (WBGT)
+        air_temp_val = city_feature_stats.get(city_name, {}).get('Air_Temp', {}).get('mean', stats.get('Air_Temp', {}).get('mean', 28.13))
+        heat_stress = compute_heat_stress(predicted_lst, air_temp_val)
+        heat_stress_label, heat_stress_icon, heat_stress_color = get_heat_stress_class(heat_stress)
+        
+        # SHAP for Top Driver
+        shap_values = get_shap_values(explainer, input_df, scaler, feature_cols)
+        abs_shap = [abs(v) for i,v in enumerate(shap_values) if feature_cols[i] != 'city_encoded']
+        feat_names = [f for f in feature_cols if f != 'city_encoded']
+        top_idx = abs_shap.index(max(abs_shap))
+        top_driver_name = feat_names[top_idx]
+        top_driver_val = shap_values[top_idx]
+        
+        # Icon/full name for top driver
+        info = FEATURE_INFO.get(top_driver_name, {"icon": "📊", "name": top_driver_name, "full": top_driver_name})
+        top_driver_html = f"<strong>{info['icon']} {info['name']}</strong> ({top_driver_val:+.2f}°C)"
+        
+        # Trend
+        try:
+            trends = load_all_trends()
+            slope = trends.get(city_name, {}).get('meta', {}).get('slope', 0.0)
+            trend_html = f"{slope:+.3f}°C/year"
+        except Exception:
+            trend_html = "N/A"
+            
+        comparison_data.append({
+            'city': city_name,
+            'lst': f"{predicted_lst:.1f}°C",
+            'risk_label': heat_stress_label,
+            'risk_icon': heat_stress_icon,
+            'risk_color': heat_stress_color,
+            'driver': top_driver_html,
+            'trend': trend_html
+        })
+        
+    # Render custom HTML table with premium style
+    rows_html = ""
+    for c in comparison_data:
+        rows_html += f"""
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <td style="padding: 1rem 1.2rem; font-weight: 700; color: #f1f5f9; font-family: 'Syne', sans-serif;">{c['city']}</td>
+            <td style="padding: 1rem 1.2rem; font-size: 1.1rem; font-weight: 800; color: #FF9933;">{c['lst']}</td>
+            <td style="padding: 1rem 1.2rem;">
+                <span style="background: {c['risk_color']}20; color: {c['risk_color']}; border: 1px solid {c['risk_color']}40; padding: 0.25rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.3rem;">
+                    <span>{c['risk_icon']}</span> {c['risk_label']}
+                </span>
+            </td>
+            <td style="padding: 1rem 1.2rem; color: #cbd5e1; font-size: 0.88rem;">{c['driver']}</td>
+            <td style="padding: 1rem 1.2rem; color: #ef4444; font-weight: 700; font-size: 0.88rem;">📈 {c['trend']}</td>
+        </tr>
+        """
+        
+    st.markdown(f"""
+    <div style="background: rgba(13, 13, 22, 0.45); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 0; overflow: hidden; margin-top: 1rem; margin-bottom: 2rem;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+                <tr style="background: rgba(255, 255, 255, 0.03); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                    <th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">City</th>
+                    <th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Current LST (Mean)</th>
+                    <th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Heat Stress Risk</th>
+                    <th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Primary Heat Driver</th>
+                    <th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Warming Trend</th>
+                </tr>
+            </thead>
+            <tbody>
+                {rows_html}
+            </tbody>
+        </table>
+    </div>
+    """, unsafe_allow_html=True)
+
+
 def main():
     if 'last_city' not in st.session_state:
         st.session_state['last_city'] = None
@@ -1734,6 +1836,7 @@ margin-bottom:16px;">
     with tabs[1]:
         render_predictor_tab(ctx, model, scaler, metadata)
         render_simulator_tab(ctx, model, scaler, metadata, explainer, forest_satellite_b64, cool_roofs_satellite_b64, water_satellite_b64)
+        render_city_comparison(model, scaler, metadata, explainer, feature_cols, city_encoding, city_feature_stats, stats)
     with tabs[2]:
         render_trends_tab()
     with tabs[3]:
@@ -2455,7 +2558,7 @@ def render_simulator_tab(ctx, model, scaler, metadata, explainer, forest_satelli
         st.markdown('<p style="color: #94a3b8; font-size: 0.82rem; margin-bottom: 1rem;">Drag sliders to simulate custom interventions in real time.</p>', unsafe_allow_html=True)
         custom_deltas = {}
         csc1, csc2, csc3 = st.columns(3)
-        adjustable = [('NDVI', csc1, "\U0001F333 Target NDVI"), ('NDWI', csc2, "\U0001F4A7 Target NDWI"), ('NDBI', csc3, "\U0001F3D7\uFE0F Target NDBI")]
+        adjustable = [('NDVI', csc1, "Target NDVI"), ('NDWI', csc2, "Target NDWI"), ('NDBI', csc3, "Target NDBI")]
 
         for feat, col, label in adjustable:
             if feat in input_values and feat in stats:
