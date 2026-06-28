@@ -2197,6 +2197,34 @@ def render_predictor_tab(ctx, model, scaler, metadata):
                     </div>
                     """, unsafe_allow_html=True)
 
+            # ── Top 3 Priority Intervention Zones (Optimized Cooling) ────────
+            top3_indices = np.argsort(grid_arrays['predicted_lst'])[-3:][::-1]
+            interventions = [
+                "🌲 Plant trees here first (Increase green canopy & evapotranspiration)",
+                "🏠 Cool roof candidate (High-albedo paint/coatings to reflect solar heat)",
+                "💧 Water body restoration (Restore natural blue space for evaporative cooling)"
+            ]
+            
+            st.markdown('<div class="section-header">🎯 Top 3 Priority Intervention Zones (Optimized Cooling)</div>', unsafe_allow_html=True)
+            st.markdown('<p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 1rem;">Based on real-time spatial predictions, these exact locations exhibit the highest thermal accumulation and are prioritized for mitigation.</p>', unsafe_allow_html=True)
+            
+            z_col1, z_col2, z_col3 = st.columns(3)
+            for i, idx in enumerate(top3_indices):
+                lat_val = grid_arrays['flat_lats'][idx]
+                lon_val = grid_arrays['flat_lons'][idx]
+                lst_val = grid_arrays['predicted_lst'][idx]
+                col = [z_col1, z_col2, z_col3][i]
+                
+                with col:
+                    st.markdown(f"""
+                    <div class="metric-card" style="border-top: 3px solid #FF9933;">
+                        <div style="font-size: 0.85rem; font-weight: 700; color: #FF9933; margin-bottom: 0.3rem;">Zone {i+1}</div>
+                        <div style="font-size: 1.6rem; font-weight: 800; color: #f1f5f9; margin-bottom: 0.2rem;">{lst_val:.1f}°C</div>
+                        <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.8rem; font-family: monospace;">{lat_val:.4f}°N, {lon_val:.4f}°E</div>
+                        <div style="font-size: 0.82rem; color: #cbd5e1; font-weight: 600; line-height: 1.35;">{interventions[i]}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+
     # Coordinate Info Cards
     st.markdown("")
     if is_custom:
