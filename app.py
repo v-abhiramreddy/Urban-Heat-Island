@@ -1861,21 +1861,33 @@ margin-bottom:16px;">
                 Quick Guide to navigate the geospatial analysis, simulations, and mitigation recommendations:
             </p>
             <ul style="margin-bottom: 0; padding-left: 0; font-size: 0.95rem; color: #cbd5e1; line-height: 1.8; list-style-type: none;">
-                <li style="margin-bottom: 1rem; display: flex; gap: 0.8rem; align-items: flex-start;">
-                    <span style="font-size: 1.2rem;">🗺️</span>
-                    <div><strong>1. Select Location:</strong> Use the top <strong>Planning Bar</strong> to switch mode (Preset City or Custom Coordinates). Toggle <strong>PINN comparison</strong> or <strong>Population Vulnerability</strong> overlays to examine physical and demographic risks.</div>
+                <li style="margin-bottom: 1.2rem; display: flex; gap: 0.8rem; align-items: flex-start;">
+                    <span style="font-size: 1.2rem; margin-top: 0.2rem;">🗺️</span>
+                    <div>
+                        <strong style="font-size: 1.05rem; color: #f1f5f9; display: block; margin-bottom: 0.2rem;">1. Select Location</strong>
+                        Use the top <strong>Planning Bar</strong> to switch mode (Preset City or Custom Coordinates). Toggle <strong>PINN comparison</strong> or <strong>Population Vulnerability</strong> overlays to examine physical and demographic risks.
+                    </div>
                 </li>
-                <li style="margin-bottom: 1rem; display: flex; gap: 0.8rem; align-items: flex-start;">
-                    <span style="font-size: 1.2rem;">📊</span>
-                    <div><strong>2. Simulation Dashboard:</strong> Real-time XGBoost predictions update automatically. Inspect the <strong>SHAP graph</strong> to see feature influences, and review the <strong>🎯 Priority Intervention Zones</strong> right below the map to target hotspots.</div>
+                <li style="margin-bottom: 1.2rem; display: flex; gap: 0.8rem; align-items: flex-start;">
+                    <span style="font-size: 1.2rem; margin-top: 0.2rem;">📊</span>
+                    <div>
+                        <strong style="font-size: 1.05rem; color: #f1f5f9; display: block; margin-bottom: 0.2rem;">2. Simulation Dashboard</strong>
+                        Real-time XGBoost predictions update automatically. Inspect the <strong>SHAP graph</strong> to see feature influences, and review the <strong>🎯 Priority Intervention Zones</strong> right below the map to target hotspots.
+                    </div>
                 </li>
-                <li style="margin-bottom: 1rem; display: flex; gap: 0.8rem; align-items: flex-start;">
-                    <span style="font-size: 1.2rem;">🚀</span>
-                    <div><strong>3. Run Cooling Projects:</strong> Click preset buttons (e.g. <em>Simulate Urban Forest</em>) or adjust custom sliders to view temperature drops. Cooling triggers the <strong>🌱 Quantified Savings</strong> card (energy, carbon, cost savings).</div>
+                <li style="margin-bottom: 1.2rem; display: flex; gap: 0.8rem; align-items: flex-start;">
+                    <span style="font-size: 1.2rem; margin-top: 0.2rem;">🚀</span>
+                    <div>
+                        <strong style="font-size: 1.05rem; color: #f1f5f9; display: block; margin-bottom: 0.2rem;">3. Run Cooling Projects</strong>
+                        Click preset buttons (e.g. <em>Simulate Urban Forest</em>) or adjust custom sliders to view temperature drops. Cooling triggers the <strong>🌱 Quantified Savings</strong> card (energy, carbon, cost savings).
+                    </div>
                 </li>
-                <li style="margin-bottom: 1rem; display: flex; gap: 0.8rem; align-items: flex-start;">
-                    <span style="font-size: 1.2rem;">🏙️</span>
-                    <div><strong>4. Compare & Download:</strong> Visit the <strong>City Comparison</strong> tab to evaluate all 4 preset cities side-by-side. Click <strong>Download Full Analysis Report (.txt)</strong> at the bottom of the Simulation tab to generate offline summaries.</div>
+                <li style="margin-bottom: 1.2rem; display: flex; gap: 0.8rem; align-items: flex-start;">
+                    <span style="font-size: 1.2rem; margin-top: 0.2rem;">🏙️</span>
+                    <div>
+                        <strong style="font-size: 1.05rem; color: #f1f5f9; display: block; margin-bottom: 0.2rem;">4. Compare & Download</strong>
+                        Visit the <strong>City Comparison</strong> tab to evaluate all 4 preset cities side-by-side. Click <strong>Download Full Analysis Report (.txt)</strong> at the bottom of the Simulation tab to generate offline summaries.
+                    </div>
                 </li>
             </ul>
         </div>
