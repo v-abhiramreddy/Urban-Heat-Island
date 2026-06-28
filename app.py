@@ -2779,10 +2779,10 @@ def render_trends_tab():
     CITY_COLORS = {'Hyderabad': '#f97316', 'Delhi': '#ef4444', 'Mumbai': '#3b82f6', 'Chennai': '#10b981'}
     
     HISTORICAL_NDVI = {
-        'Hyderabad': [0.165, 0.182, 0.208, 0.221, 0.246],
-        'Delhi':     [0.142, 0.146, 0.153, 0.149, 0.156],
-        'Mumbai':    [0.211, 0.215, 0.222, 0.219, 0.226],
-        'Chennai':   [0.180, 0.183, 0.186, 0.184, 0.189]
+        'Hyderabad': {2017: 0.165, 2019: 0.182, 2021: 0.208, 2023: 0.221, 2025: 0.246},
+        'Delhi':     {2017: 0.142, 2019: 0.146, 2021: 0.153, 2023: 0.149, 2025: 0.156},
+        'Mumbai':    {2017: 0.211, 2019: 0.215, 2021: 0.220, 2023: 0.219, 2025: 0.226},
+        'Chennai':   {2017: 0.180, 2019: 0.183, 2021: 0.186, 2023: 0.184, 2025: 0.189}
     }
     
     # Pre-calculate trends data with NDVI columns added
@@ -2793,7 +2793,8 @@ def render_trends_tab():
         
         years = df_t['year'].values
         lst_vals = df_t['mean_lst'].values
-        ndvi_vals = np.array(HISTORICAL_NDVI.get(city_name, [0.2] * len(years)))
+        city_ndvi = HISTORICAL_NDVI.get(city_name, {})
+        ndvi_vals = np.array([city_ndvi.get(int(y), 0.2) for y in years])
         
         # Calculate NDVI trend line using np.polyfit
         ndvi_slope, ndvi_intercept = np.polyfit(years, ndvi_vals, 1)
