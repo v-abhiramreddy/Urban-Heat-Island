@@ -1062,6 +1062,9 @@ def build_city_map(city_name, _model, _scaler, _metadata):
     city_feature_stats = _metadata.get('city_feature_stats', {})
     mean_air_temp = city_feature_stats.get(city_name, {}).get('Air_Temp', {}).get('mean', stats.get('Air_Temp', {}).get('mean', 30.0))
 
+    fg_priority = folium.FeatureGroup(name="Priority Intervention Zones", show=True)
+    fg_hotspots = folium.FeatureGroup(name="Other Heat Hotspots", show=True)
+
     top5_indices = np.argsort(predicted_lst)[-5:][::-1]
     for rank, idx in enumerate(top5_indices):
         spot_lat = float(flat_lats[idx])
@@ -1077,18 +1080,22 @@ def build_city_map(city_name, _model, _scaler, _metadata):
             title = "🎯 Priority Intervention Zone #1"
             action = "🌲 Recommendation: Plant Trees First"
             color = "#ef4444" # Red
+            target_fg = fg_priority
         elif rank == 1:
             title = "🎯 Priority Intervention Zone #2"
             action = "🏠 Recommendation: Cool Roof Candidate"
             color = "#f97316" # Orange
+            target_fg = fg_priority
         elif rank == 2:
             title = "🎯 Priority Intervention Zone #3"
             action = "💧 Recommendation: Water Body Restoration"
             color = "#3b82f6" # Blue
+            target_fg = fg_priority
         else:
             title = f"🔥 Hotspot #{rank+1}"
             action = "Monitor temperature levels"
             color = "#eab308" # Yellow
+            target_fg = fg_hotspots
             
         folium.CircleMarker(
             location=[spot_lat, spot_lon],
@@ -1106,7 +1113,10 @@ def build_city_map(city_name, _model, _scaler, _metadata):
                 f"Lon: {spot_lon:.4f}"
             ),
             tooltip=f"{title} — LST {spot_lst:.1f}°C | {action}",
-        ).add_to(m)
+        ).add_to(target_fg)
+
+    fg_priority.add_to(m)
+    fg_hotspots.add_to(m)
 
     folium.LayerControl(collapsed=False).add_to(m)
 
@@ -2156,6 +2166,7 @@ def render_predictor_tab(ctx, model, scaler, metadata):
                 HeatMap(vuln_data, name="Vulnerability", min_opacity=0.4, max_zoom=15, radius=20, blur=24,
                         gradient={0.2:"#312e81",0.4:"#6d28d9",0.6:"#a855f7",0.75:"#f472b6",0.9:"#fb7185",1.0:"#ef4444"}).add_to(vm)
                 # Add priority intervention zone markers to vulnerability map
+                fg_priority = folium.FeatureGroup(name="Priority Intervention Zones", show=True)
                 ga_lsts = np.array(ga['predicted_lst'])
                 top3_indices = np.argsort(ga_lsts)[-3:][::-1]
                 for rank, idx in enumerate(top3_indices):
@@ -2194,7 +2205,9 @@ def render_predictor_tab(ctx, model, scaler, metadata):
                             f"Lon: {spot_lon:.4f}"
                         ),
                         tooltip=f"{title} — LST {spot_lst:.1f}°C | {action}",
-                    ).add_to(vm)
+                    ).add_to(fg_priority)
+
+                fg_priority.add_to(vm)
 
                 folium.LayerControl().add_to(vm)
                 city_map_html = vm._repr_html_()
@@ -2277,10 +2290,10 @@ def render_predictor_tab(ctx, model, scaler, metadata):
                 with col:
                     st.markdown(f"""
                     <div class="metric-card" style="border-top: 3.5px solid #FF9933; padding: 1.25rem 1rem;">
-                        <div style="font-size: 1.05rem; font-weight: 800; color: #FF9933; margin-bottom: 0.4rem; letter-spacing: 0.5px;">Zone {i+1}</div>
-                        <div style="font-size: 2.1rem; font-weight: 800; color: #ffffff; margin-bottom: 0.3rem; font-family: 'Syne', sans-serif;">{lst_val:.1f}°C</div>
-                        <div style="font-size: 0.95rem; color: #cbd5e1; margin-bottom: 1rem; font-family: monospace; font-weight: 500;">{lat_val:.4f}°N, {lon_val:.4f}°E</div>
-                        <div style="font-size: 0.95rem; color: #ffffff; font-weight: 700; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.8rem;">{interventions[i]}</div>
+                        <div style="font-size: 1.1rem; font-weight: 800; color: #FF9933; margin-bottom: 0.4rem; letter-spacing: 0.5px;">Zone {i+1}</div>
+                        <div style="font-size: 1.0rem; font-weight: 600; color: #ffffff; margin-bottom: 0.3rem; font-family: 'Syne', sans-serif;">{lst_val:.1f}°C</div>
+                        <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1rem; font-family: monospace; font-weight: 500;">{lat_val:.4f}°N, {lon_val:.4f}°E</div>
+                        <div style="font-size: 0.9rem; color: #ffffff; font-weight: 400; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.8rem;">{interventions[i]}</div>
                     </div>
                     """, unsafe_allow_html=True)
 
