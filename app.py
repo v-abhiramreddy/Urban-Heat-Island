@@ -1325,6 +1325,20 @@ def main():
     </div>
     """, unsafe_allow_html=True)
 
+    st.markdown("""
+<div style="display:flex; align-items:center; gap:16px; 
+padding:8px 0 16px 0; border-bottom:1px solid #2a2a3a; 
+margin-bottom:16px;">
+    <img src="https://www.isro.gov.in/sites/default/files/isro_0.png" 
+         height="40" style="object-fit:contain;"/>
+    <div style="width:1px;height:36px;background:#333;"></div>
+    <span style="font-size:12px;color:#8a95b0;line-height:1.4;">
+        <strong style="color:#FF6B00;">Bharatiya Antariksh Hackathon 2026</strong><br>
+        Problem Statement 7 — Urban Heat Mitigation via AI/ML
+    </span>
+</div>
+""", unsafe_allow_html=True)
+
     # ── Spacenas-Style Hero Header ───────────────────────────────────────
     st.markdown(f"""
     <div class="spacenas-hero">
