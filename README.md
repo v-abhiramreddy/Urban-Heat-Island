@@ -3,7 +3,7 @@
 
 A geospatial AI/ML system that identifies urban heat stress hotspots, quantifies key drivers of urban heating, and generates optimized scenario-based cooling interventions — backed by physics-informed decision-making.
 
-**Live Demo:** [https://urban-heat-island-spfvstymdsbq5zocoqb8bu.streamlit.app]
+**Live Demo:** []
 
 ---
 
@@ -54,21 +54,24 @@ A geospatial AI/ML system that identifies urban heat stress hotspots, quantifies
 - Evaporative cooling modeled via NDVI-based constraint
 - PINN loss = Data MSE + 0.1 × Physics violation penalty
 
-### Layer 5 — Scenario Engine
+### Layer 5 — Scenario Engine & Savings Quantifier
 Three pre-defined cooling interventions with quantified ΔT:
 - 🌳 **Plant Urban Forest** — NDVI +0.15, NDBI −0.05
 - 🏠 **Install Cool Roofs** — NDWI +0.05, NDBI −0.10
 - 💧 **Restore Water Body** — NDWI +0.12, NDBI −0.03
+- **Custom Scenario Engine**: Slide controls to simulate custom parameter adjustments.
+- **🌱 Quantified Savings Estimator**: Calculates cooling energy savings (MWh/day), avoided carbon emissions (tCO₂/yr), and financial cost savings (Lakhs/yr) across 10 km² based on EPA guidelines and CEA Indian grid factors.
 
-Custom scenario slider for arbitrary feature combinations.
-
-### Layer 6 — Heat Stress Assessment
-- **Heat Stress Index** — LST-adjusted approximation combining air temperature and radiant heat load
+### Layer 6 — Heat Stress & Spatial Recommendations
+- **Heat Stress Index** — LST-adjusted approximation combining air temperature and radiant heat load.
 - Thresholds based on general outdoor heat stress guidelines:
   - 🟢 < 28°C — Low risk
   - 🟡 28–32°C — Moderate risk
   - 🟠 32–35°C — High risk
   - 🔴 > 35°C — Extreme risk
+- **🎯 Best Cooling Zone Recommender**: Dynamically isolates the top 3 hotspot coordinates from the 60×60 predicted spatial grid, recommends specific interventions, and displays them as interactive markers with toggle checkboxes in the map's native layer control.
+- **🏙️ City Comparison**: Dedicated side-by-side comparative panel listing current LST, heat stress risk levels, primary heat drivers, and historical warming trends across Hyderabad, Delhi, Mumbai, and Chennai.
+- **📄 Downloadable Analysis Report**: Text-based analysis reports outlining spatial model outputs, SHAP attributions, heat stress indices, and recommended interventions.
 
 ---
 

@@ -1854,36 +1854,28 @@ margin-bottom:16px;">
         # ── User Manual / How to Use Section ──────────────────────────────────
         st.markdown("""
         <div class="insight-box" style="border-left-color: #f59e0b; margin-bottom: 2rem; padding: 1.8rem 2.2rem !important; min-height: 400px; background: rgba(13, 13, 22, 0.6) !important;">
-            <h2 style="margin-top: 0; color: #f1f5f9; font-size: 1.5rem; display: flex; align-items: center; gap: 0.6rem; font-family: 'Syne', sans-serif; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.8rem; margin-bottom: 1.5rem;">
-                📖 User Manual: How to Use the Dashboard
+            <h2 style="margin-top: 0; color: #f1f5f9; font-size: 1.5rem; display: flex; align-items: center; gap: 0.6rem; font-family: 'Outfit', sans-serif; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.8rem; margin-bottom: 1.5rem;">
+                📖 Dashboard User Manual
             </h2>
             <p style="color: #cbd5e1; font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">
-                Welcome to the Urban Heat Island Predictor Dashboard. Follow these steps to configure simulations, analyze heat drivers, and run mitigation scenarios:
+                Quick Guide to navigate the geospatial analysis, simulations, and mitigation recommendations:
             </p>
-            <ul style="margin-bottom: 0; padding-left: 1.5rem; font-size: 1rem; color: #cbd5e1; line-height: 1.9; list-style-type: none;">
-                <li style="margin-bottom: 1.2rem; display: flex; gap: 0.8rem; align-items: flex-start;">
-                    <span style="font-size: 1.2rem;">⚙️</span>
-                    <div><strong>Select Location & Mode:</strong> Choose between a preset Indian city or custom coordinates in the horizontal <strong>Planning Bar</strong>. Enable analysis overlays (Physics PINN or Population Vulnerability) to view comparative model responses.</div>
+            <ul style="margin-bottom: 0; padding-left: 0; font-size: 0.95rem; color: #cbd5e1; line-height: 1.8; list-style-type: none;">
+                <li style="margin-bottom: 1rem; display: flex; gap: 0.8rem; align-items: flex-start;">
+                    <span style="font-size: 1.2rem;">🗺️</span>
+                    <div><strong>1. Select Location:</strong> Use the top <strong>Planning Bar</strong> to switch mode (Preset City or Custom Coordinates). Toggle <strong>PINN comparison</strong> or <strong>Population Vulnerability</strong> overlays to examine physical and demographic risks.</div>
                 </li>
-                <li style="margin-bottom: 1.2rem; display: flex; gap: 0.8rem; align-items: flex-start;">
-                    <span style="font-size: 1.2rem;">⚡</span>
-                    <div><strong>Reactive Real-time Predictions:</strong> The machine learning models run automatically. Modifying any coordinate, dropdown, or environmental slider instantly updates the Land Surface Temperature (LST) and map without needing any manual submit buttons.</div>
-                </li>
-                <li style="margin-bottom: 1.2rem; display: flex; gap: 0.8rem; align-items: flex-start;">
+                <li style="margin-bottom: 1rem; display: flex; gap: 0.8rem; align-items: flex-start;">
                     <span style="font-size: 1.2rem;">📊</span>
-                    <div><strong>Analyze Feature Influence:</strong> Navigate to the <strong>Simulation Dashboard</strong> tab to view the <strong>SHAP Feature Attribution</strong> chart to see how much each local environmental factor (NDVI, NDWI, NDBI, Albedo, MNDWI) contributes to warming or cooling.</div>
+                    <div><strong>2. Simulation Dashboard:</strong> Real-time XGBoost predictions update automatically. Inspect the <strong>SHAP graph</strong> to see feature influences, and review the <strong>🎯 Priority Intervention Zones</strong> right below the map to target hotspots.</div>
                 </li>
-                <li style="margin-bottom: 1.2rem; display: flex; gap: 0.8rem; align-items: flex-start;">
-                    <span style="font-size: 1.2rem;">🎯</span>
-                    <div><strong>Assess Heat Vulnerability & Risk:</strong> Check the <strong>Heat Stress Classification</strong> card to view safety warnings, and toggle the <strong>Population Vulnerability</strong> map overlay to see where high temperatures overlap with dense residential areas.</div>
-                </li>
-                <li style="margin-bottom: 1.2rem; display: flex; gap: 0.8rem; align-items: flex-start;">
+                <li style="margin-bottom: 1rem; display: flex; gap: 0.8rem; align-items: flex-start;">
                     <span style="font-size: 1.2rem;">🚀</span>
-                    <div><strong>Simulate Mitigation Projects:</strong> Click the mitigation buttons (e.g. <em>Simulate Urban Forest</em>, <em>Simulate Cool Roofs</em>, <em>Simulate Water Restore</em>) under the cards to instantly model pre-calculated changes and see their cooling projection.</div>
+                    <div><strong>3. Run Cooling Projects:</strong> Click preset buttons (e.g. <em>Simulate Urban Forest</em>) or adjust custom sliders to view temperature drops. Cooling triggers the <strong>🌱 Quantified Savings</strong> card (energy, carbon, cost savings).</div>
                 </li>
-                <li style="margin-bottom: 1.2rem; display: flex; gap: 0.8rem; align-items: flex-start;">
-                    <span style="font-size: 1.2rem;">🛠️</span>
-                    <div><strong>Design Custom Scenarios:</strong> Expand the <strong>Custom Scenario</strong> drawer at the bottom of the Simulation Dashboard tab to manually adjust target values using sliders and test custom climate resilience scenarios in real-time.</div>
+                <li style="margin-bottom: 1rem; display: flex; gap: 0.8rem; align-items: flex-start;">
+                    <span style="font-size: 1.2rem;">🏙️</span>
+                    <div><strong>4. Compare & Download:</strong> Visit the <strong>City Comparison</strong> tab to evaluate all 4 preset cities side-by-side. Click <strong>Download Full Analysis Report (.txt)</strong> at the bottom of the Simulation tab to generate offline summaries.</div>
                 </li>
             </ul>
         </div>
