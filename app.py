@@ -1483,38 +1483,39 @@ def render_city_comparison(model, scaler, metadata, explainer, feature_cols, cit
     # Render custom HTML table with premium style
     rows_html = ""
     for c in comparison_data:
-        rows_html += f"""
-        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-            <td style="padding: 1rem 1.2rem; font-weight: 700; color: #f1f5f9; font-family: 'Syne', sans-serif;">{c['city']}</td>
-            <td style="padding: 1rem 1.2rem; font-size: 1.1rem; font-weight: 800; color: #FF9933;">{c['lst']}</td>
-            <td style="padding: 1rem 1.2rem;">
-                <span style="background: {c['risk_color']}20; color: {c['risk_color']}; border: 1px solid {c['risk_color']}40; padding: 0.25rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.3rem;">
-                    <span>{c['risk_icon']}</span> {c['risk_label']}
-                </span>
-            </td>
-            <td style="padding: 1rem 1.2rem; color: #cbd5e1; font-size: 0.88rem;">{c['driver']}</td>
-            <td style="padding: 1rem 1.2rem; color: #ef4444; font-weight: 700; font-size: 0.88rem;">📈 {c['trend']}</td>
-        </tr>
-        """
+        rows_html += (
+            f'<tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">'
+            f'<td style="padding: 1rem 1.2rem; font-weight: 700; color: #f1f5f9; font-family: \'Syne\', sans-serif;">{c["city"]}</td>'
+            f'<td style="padding: 1rem 1.2rem; font-size: 1.1rem; font-weight: 800; color: #FF9933;">{c["lst"]}</td>'
+            f'<td style="padding: 1rem 1.2rem;">'
+            f'<span style="background: {c["risk_color"]}20; color: {c["risk_color"]}; border: 1px solid {c["risk_color"]}40; padding: 0.25rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.3rem;">'
+            f'<span>{c["risk_icon"]}</span> {c["risk_label"]}'
+            f'</span>'
+            f'</td>'
+            f'<td style="padding: 1rem 1.2rem; color: #cbd5e1; font-size: 0.88rem;">{c["driver"]}</td>'
+            f'<td style="padding: 1rem 1.2rem; color: #ef4444; font-weight: 700; font-size: 0.88rem;">📈 {c["trend"]}</td>'
+            f'</tr>'
+        )
         
-    st.markdown(f"""
-    <div style="background: rgba(13, 13, 22, 0.45); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 0; overflow: hidden; margin-top: 1rem; margin-bottom: 2rem;">
-        <table style="width: 100%; border-collapse: collapse; text-align: left;">
-            <thead>
-                <tr style="background: rgba(255, 255, 255, 0.03); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-                    <th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">City</th>
-                    <th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Current LST (Mean)</th>
-                    <th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Heat Stress Risk</th>
-                    <th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Primary Heat Driver</th>
-                    <th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Warming Trend</th>
-                </tr>
-            </thead>
-            <tbody>
-                {rows_html}
-            </tbody>
-        </table>
-    </div>
-    """, unsafe_allow_html=True)
+    table_html = (
+        f'<div style="background: rgba(13, 13, 22, 0.45); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 0; overflow: hidden; margin-top: 1rem; margin-bottom: 2rem;">'
+        f'<table style="width: 100%; border-collapse: collapse; text-align: left;">'
+        f'<thead>'
+        f'<tr style="background: rgba(255, 255, 255, 0.03); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">'
+        f'<th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">City</th>'
+        f'<th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Current LST (Mean)</th>'
+        f'<th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Heat Stress Risk</th>'
+        f'<th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Primary Heat Driver</th>'
+        f'<th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Warming Trend</th>'
+        f'</tr>'
+        f'</thead>'
+        f'<tbody>'
+        f'{rows_html}'
+        f'</tbody>'
+        f'</table>'
+        f'</div>'
+    )
+    st.markdown(table_html, unsafe_allow_html=True)
 
 
 def main():
