@@ -787,6 +787,30 @@ div[data-testid="stTabBar"] {
         line-height: 1.5 !important;
         padding: 0 1rem !important;
     }
+    /* Stack metric cards vertically on mobile */
+    .metric-card {
+        min-width: 100% !important;
+    }
+    .section-header {
+        font-size: 1.05rem !important;
+    }
+    .insight-box {
+        padding: 0.6rem 0.8rem !important;
+        font-size: 0.88rem !important;
+    }
+    .intervention-card {
+        min-height: 140px !important;
+    }
+    .shap-bar-container {
+        padding: 0.5rem 0.6rem !important;
+    }
+    .city-info-banner {
+        padding: 0.7rem 0.8rem !important;
+    }
+    /* Stack side-by-side columns */
+    [data-testid="column"] {
+        min-width: 100% !important;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -2582,111 +2606,112 @@ def render_simulator_tab(ctx, model, scaler, metadata, explainer, forest_satelli
         render_savings_estimate(result['delta_lst'], scen_cfg['color'])
 
     st.markdown("")
-    left_col, right_col = st.columns([3, 2])
-    with left_col:
-        st.markdown('<div class="section-header">\U0001F50D SHAP Feature Attribution</div>', unsafe_allow_html=True)
-        st.markdown('<p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 1rem;">How each feature pushes predicted LST up (warming) or down (cooling).</p>', unsafe_allow_html=True)
+    with st.expander("\U0001F50D SHAP Feature Attribution & Scenario Analysis", expanded=True):
+        left_col, right_col = st.columns([3, 2])
+        with left_col:
+            st.markdown('<div class="section-header">\U0001F50D SHAP Feature Attribution</div>', unsafe_allow_html=True)
+            st.markdown('<p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 1rem;">How each feature pushes predicted LST up (warming) or down (cooling).</p>', unsafe_allow_html=True)
 
-        shap_abs = np.abs(shap_values)
-        shap_order = np.argsort(shap_abs)[::-1]
-        max_abs_shap = float(np.max(shap_abs)) if float(np.max(shap_abs)) > 0 else 1.0
+            shap_abs = np.abs(shap_values)
+            shap_order = np.argsort(shap_abs)[::-1]
+            max_abs_shap = float(np.max(shap_abs)) if float(np.max(shap_abs)) > 0 else 1.0
 
-        for idx in shap_order:
-            feat = feature_cols[idx]
-            if feat == 'city_encoded':
-                continue
-            val = shap_values[idx]
-            info = FEATURE_INFO.get(feat, {"icon": "📊", "full": feat, "unit": "", "desc": ""})
-            pct = min(abs(val) / max_abs_shap * 100, 100)
-            color = get_shap_bar_color(val, max_abs_shap)
-            direction = "Warming \u2191" if val >= 0 else "Cooling \u2193"
-            dir_color = "#f97316" if val >= 0 else "#06b6d4"
+            for idx in shap_order:
+                feat = feature_cols[idx]
+                if feat == 'city_encoded':
+                    continue
+                val = shap_values[idx]
+                info = FEATURE_INFO.get(feat, {"icon": "📊", "full": feat, "unit": "", "desc": ""})
+                pct = min(abs(val) / max_abs_shap * 100, 100)
+                color = get_shap_bar_color(val, max_abs_shap)
+                direction = "Warming \u2191" if val >= 0 else "Cooling \u2193"
+                dir_color = "#f97316" if val >= 0 else "#06b6d4"
 
-            desc = info.get('desc', '')
-            tooltip_attr = f'title="{desc}" style="cursor: help;"' if desc else ''
+                desc = info.get('desc', '')
+                tooltip_attr = f'title="{desc}" style="cursor: help;"' if desc else ''
+                st.markdown(f"""
+                <div class="shap-bar-container">
+                    <div class="shap-feature-name" {tooltip_attr}>{info['icon']} {info['full']}</div>
+                    <div class="shap-bar-track">
+                        <div class="shap-bar-fill" style="width: {pct:.1f}%; background: {color};"></div>
+                    </div>
+                    <div class="shap-value-text">
+                        <span>Input: {input_values[feat]:.4f} {info['unit']}</span>
+                        <span style="color: {dir_color}; font-weight: 600;">{val:+.3f}\u00b0C ({direction})</span>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+
+            ev = explainer.expected_value
+            base_value = float(ev[0]) if isinstance(ev, np.ndarray) else float(ev)
             st.markdown(f"""
-            <div class="shap-bar-container">
-                <div class="shap-feature-name" {tooltip_attr}>{info['icon']} {info['full']}</div>
-                <div class="shap-bar-track">
-                    <div class="shap-bar-fill" style="width: {pct:.1f}%; background: {color};"></div>
-                </div>
-                <div class="shap-value-text">
-                    <span>Input: {input_values[feat]:.4f} {info['unit']}</span>
-                    <span style="color: {dir_color}; font-weight: 600;">{val:+.3f}\u00b0C ({direction})</span>
-                </div>
+            <div class="insight-box">
+                <strong>\u25B5 Base Value:</strong> {base_value:.2f}\u00b0C \u2192 <strong>Prediction: {predicted_lst:.1f}\u00b0C</strong><br><br>
+                <em>The base value is the average model output. Each SHAP value shows how a feature shifts the prediction.</em>
             </div>
             """, unsafe_allow_html=True)
 
-        ev = explainer.expected_value
-        base_value = float(ev[0]) if isinstance(ev, np.ndarray) else float(ev)
-        st.markdown(f"""
-        <div class="insight-box">
-            <strong>\u25B5 Base Value:</strong> {base_value:.2f}\u00b0C \u2192 <strong>Prediction: {predicted_lst:.1f}\u00b0C</strong><br><br>
-            <em>The base value is the average model output. Each SHAP value shows how a feature shifts the prediction.</em>
-        </div>
-        """, unsafe_allow_html=True)
+        with right_col:
+            st.markdown('<div class="section-header">\U0001F4CB Scenario Analysis</div>', unsafe_allow_html=True)
+            loc_name = selected_city if not is_custom else "training data"
+            st.markdown(f'<p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 1rem;">Current inputs compared to {loc_name} statistics.</p>', unsafe_allow_html=True)
 
-    with right_col:
-        st.markdown('<div class="section-header">\U0001F4CB Scenario Analysis</div>', unsafe_allow_html=True)
-        loc_name = selected_city if not is_custom else "training data"
-        st.markdown(f'<p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 1rem;">Current inputs compared to {loc_name} statistics.</p>', unsafe_allow_html=True)
+            for col_name in base_feature_cols:
+                s = stats[col_name]
+                info = FEATURE_INFO.get(col_name, {"icon": "📊", "name": col_name, "full": col_name, "desc": ""})
+                val = input_values[col_name]
+                denom = s['max'] - s['min']
+                pct_rank = max(0, min(100, (val - s['min']) / denom * 100)) if denom > 0 else 50
 
-        for col_name in base_feature_cols:
-            s = stats[col_name]
-            info = FEATURE_INFO.get(col_name, {"icon": "📊", "name": col_name, "full": col_name, "desc": ""})
-            val = input_values[col_name]
-            denom = s['max'] - s['min']
-            pct_rank = max(0, min(100, (val - s['min']) / denom * 100)) if denom > 0 else 50
+                if val < s['q25']:
+                    level, level_color = "Below Avg", "#FF9933"
+                elif val > s['q75']:
+                    level, level_color = "Above Avg", "#138808"
+                else:
+                    level, level_color = "Average", "#ffffff"
 
-            if val < s['q25']:
-                level, level_color = "Below Avg", "#FF9933"
-            elif val > s['q75']:
-                level, level_color = "Above Avg", "#138808"
-            else:
-                level, level_color = "Average", "#ffffff"
+                desc = info.get('desc', '')
+                tooltip_attr = f'title="{desc}" style="cursor: help; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 0.7rem 1rem; margin-bottom: 0.5rem;"' if desc else 'style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 0.7rem 1rem; margin-bottom: 0.5rem;"'
 
-            desc = info.get('desc', '')
-            tooltip_attr = f'title="{desc}" style="cursor: help; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 0.7rem 1rem; margin-bottom: 0.5rem;"' if desc else 'style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 0.7rem 1rem; margin-bottom: 0.5rem;"'
-
-            st.markdown(f"""
-            <div {tooltip_attr}>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 0.82rem; font-weight: 600; color: #f1f5f9;">{info['icon']} {info['name']} <span style="font-size: 0.7rem; font-weight: 400; color: #94a3b8; margin-left: 3px;">({info['full']})</span></span>
-                    <span style="font-size: 0.75rem; color: {level_color}; font-weight: 600;">{level}</span>
+                st.markdown(f"""
+                <div {tooltip_attr}>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.82rem; font-weight: 600; color: #f1f5f9;">{info['icon']} {info['name']} <span style="font-size: 0.7rem; font-weight: 400; color: #94a3b8; margin-left: 3px;">({info['full']})</span></span>
+                        <span style="font-size: 0.75rem; color: {level_color}; font-weight: 600;">{level}</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.06); border-radius: 4px; height: 4px; margin-top: 0.4rem;">
+                        <div style="width: {pct_rank:.0f}%; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #FF9933 0%, #ffffff 50%, #138808 100%);"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 0.2rem;">
+                        <span style="font-size: 0.7rem; color: #64748b;">{s['min']:.3f}</span>
+                        <span style="font-size: 0.7rem; color: #94a3b8; font-weight: 500;">{val:.4f}</span>
+                        <span style="font-size: 0.7rem; color: #64748b;">{s['max']:.3f}</span>
+                    </div>
                 </div>
-                <div style="background: rgba(255,255,255,0.06); border-radius: 4px; height: 4px; margin-top: 0.4rem;">
-                    <div style="width: {pct_rank:.0f}%; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #FF9933 0%, #ffffff 50%, #138808 100%);"></div>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-top: 0.2rem;">
-                    <span style="font-size: 0.7rem; color: #64748b;">{s['min']:.3f}</span>
-                    <span style="font-size: 0.7rem; color: #94a3b8; font-weight: 500;">{val:.4f}</span>
-                    <span style="font-size: 0.7rem; color: #64748b;">{s['max']:.3f}</span>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
 
-        st.markdown('<div class="section-header">\U0001F4A1 Recommendations</div>', unsafe_allow_html=True)
-        recs = []
-        ndvi_val = input_values.get('NDVI', 0)
-        ndbi_val = input_values.get('NDBI', 0)
-        ndwi_val = input_values.get('NDWI', 0)
-        ndvi_stats = stats.get('NDVI', {})
-        ndbi_stats = stats.get('NDBI', {})
-        ndwi_stats = stats.get('NDWI', {})
+            st.markdown('<div class="section-header">\U0001F4A1 Recommendations</div>', unsafe_allow_html=True)
+            recs = []
+            ndvi_val = input_values.get('NDVI', 0)
+            ndbi_val = input_values.get('NDBI', 0)
+            ndwi_val = input_values.get('NDWI', 0)
+            ndvi_stats = stats.get('NDVI', {})
+            ndbi_stats = stats.get('NDBI', {})
+            ndwi_stats = stats.get('NDWI', {})
 
-        if ndvi_stats and ndvi_val < ndvi_stats.get('q25', float('-inf')):
-            recs.append("\U0001F333 <strong>Increase Green Cover</strong> \u2014 NDVI is low. Urban forests can reduce LST by 2\u20135\u00b0C.")
-        if ndbi_stats and ndbi_val > ndbi_stats.get('q75', float('inf')):
-            recs.append("\U0001F3D7\uFE0F <strong>Cool Roofs & Pavements</strong> \u2014 High built-up index. Reflective roofs lower surface temp.")
-        if ndwi_stats and ndwi_val < ndwi_stats.get('q25', float('-inf')):
-            recs.append("\U0001F30A <strong>Blue Infrastructure</strong> \u2014 NDWI is low. Restoring water bodies provides natural cooling.")
-        if predicted_lst > 45:
-            recs.append("\U0001F6A8 <strong>Extreme Heat Alert</strong> \u2014 LST exceeds 45\u00b0C. Public health measures needed.")
-        if not recs:
-            recs.append("\u2705 <strong>Balanced Conditions</strong> \u2014 Moderate heat risk. Maintain parks and lakes.")
+            if ndvi_stats and ndvi_val < ndvi_stats.get('q25', float('-inf')):
+                recs.append("\U0001F333 <strong>Increase Green Cover</strong> \u2014 NDVI is low. Urban forests can reduce LST by 2\u20135\u00b0C.")
+            if ndbi_stats and ndbi_val > ndbi_stats.get('q75', float('inf')):
+                recs.append("\U0001F3D7\uFE0F <strong>Cool Roofs & Pavements</strong> \u2014 High built-up index. Reflective roofs lower surface temp.")
+            if ndwi_stats and ndwi_val < ndwi_stats.get('q25', float('-inf')):
+                recs.append("\U0001F30A <strong>Blue Infrastructure</strong> \u2014 NDWI is low. Restoring water bodies provides natural cooling.")
+            if predicted_lst > 45:
+                recs.append("\U0001F6A8 <strong>Extreme Heat Alert</strong> \u2014 LST exceeds 45\u00b0C. Public health measures needed.")
+            if not recs:
+                recs.append("\u2705 <strong>Balanced Conditions</strong> \u2014 Moderate heat risk. Maintain parks and lakes.")
 
-        for rec in recs:
-            st.markdown(f'<div class="insight-box" style="border-left-color: #f59e0b; margin-bottom: 0.5rem;">{rec}</div>', unsafe_allow_html=True)
+            for rec in recs:
+                st.markdown(f'<div class="insight-box" style="border-left-color: #f59e0b; margin-bottom: 0.5rem;">{rec}</div>', unsafe_allow_html=True)
 
     st.markdown("")
     with st.expander("\U0001F527 Custom Scenario \u2014 Manual Feature Adjustment", expanded=False):
