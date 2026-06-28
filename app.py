@@ -1260,17 +1260,17 @@ def render_savings_estimate(delta_lst, border_color="#10b981"):
     cost_savings = 28.0 * scale
     
     st.markdown(f"""
-    <div class="insight-box" style="border-left-color: {border_color}; margin-top: 1rem; margin-bottom: 1.5rem;">
-        <h4 style="margin: 0 0 0.5rem 0; color: #f1f5f9; font-size: 1rem; display: flex; align-items: center; gap: 0.4rem;">
+    <div class="insight-box" style="border-left-color: {border_color}; margin-top: 1rem; margin-bottom: 1.5rem; padding: 1.2rem 1.5rem;">
+        <h4 style="margin: 0 0 0.6rem 0; color: #ffffff; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 700;">
             🌱 Quantified Environmental & Economic Impact (Across 10 km²)
         </h4>
-        <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 0.8rem; line-height: 1.45;">
+        <p style="color: #cbd5e1; font-size: 0.98rem; margin-bottom: 1rem; line-height: 1.5;">
             A predicted <strong>{dT:.1f}°C LST reduction</strong> across a standard 10 km² urban zone yields the following estimated savings:
         </p>
-        <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; color: #cbd5e1; line-height: 1.7;">
-            <li>⚡ <strong>Cooling Energy:</strong> ~{energy_savings:.1f} MWh/day saved <span style="color: #94a3b8; font-size: 0.75rem;">(EPA Guideline: ~1.5% cooling load drop per 1°C ambient cooling)</span></li>
-            <li>📉 <strong>Carbon Offset:</strong> ~{co2_savings:.1f} tonnes CO₂/year avoided <span style="color: #94a3b8; font-size: 0.75rem;">(CEA India Grid Factor: ~0.82 tCO₂/MWh)</span></li>
-            <li>💰 <strong>Economic Savings:</strong> ~₹{cost_savings:.1f} Lakhs/year <span style="color: #94a3b8; font-size: 0.75rem;">(Based on commercial power tariff of ₹8.2/kWh)</span></li>
+        <ul style="margin: 0; padding-left: 1.5rem; font-size: 1.0rem; color: #ffffff; line-height: 1.8;">
+            <li style="margin-bottom: 0.4rem;">⚡ <strong>Cooling Energy:</strong> ~{energy_savings:.1f} MWh/day saved <span style="color: #cbd5e1; font-size: 0.85rem; opacity: 0.85; margin-left: 5px;">(EPA Guideline: ~1.5% cooling load drop per 1°C ambient cooling)</span></li>
+            <li style="margin-bottom: 0.4rem;">📉 <strong>Carbon Offset:</strong> ~{co2_savings:.1f} tonnes CO₂/year avoided <span style="color: #cbd5e1; font-size: 0.85rem; opacity: 0.85; margin-left: 5px;">(CEA India Grid Factor: ~0.82 tCO₂/MWh)</span></li>
+            <li>💰 <strong>Economic Savings:</strong> ~₹{cost_savings:.1f} Lakhs/year <span style="color: #cbd5e1; font-size: 0.85rem; opacity: 0.85; margin-left: 5px;">(Based on commercial power tariff of ₹8.2/kWh)</span></li>
         </ul>
     </div>
     """, unsafe_allow_html=True)
