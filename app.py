@@ -1794,7 +1794,7 @@ margin-bottom:16px;">
     }
 
     # ── Tabs Setup ────────────────────────────────────────────────────────
-    tabs = st.tabs(["📖 How to Use", "\U0001F4CA Simulation Dashboard", "\U0001F4C8 Temporal Trends", "\U0001F3DB\uFE0F Project Info"])
+    tabs = st.tabs(["📖 How to Use", "\U0001F4CA Simulation Dashboard", "🏙️ City Comparison", "\U0001F4C8 Temporal Trends", "\U0001F3DB\uFE0F Project Info"])
     with tabs[0]:
         # ── User Manual / How to Use Section ──────────────────────────────────
         st.markdown("""
@@ -1837,10 +1837,11 @@ margin-bottom:16px;">
     with tabs[1]:
         render_predictor_tab(ctx, model, scaler, metadata)
         render_simulator_tab(ctx, model, scaler, metadata, explainer, forest_satellite_b64, cool_roofs_satellite_b64, water_satellite_b64)
-        render_city_comparison(model, scaler, metadata, explainer, feature_cols, city_encoding, city_feature_stats, stats)
     with tabs[2]:
-        render_trends_tab()
+        render_city_comparison(model, scaler, metadata, explainer, feature_cols, city_encoding, city_feature_stats, stats)
     with tabs[3]:
+        render_trends_tab()
+    with tabs[4]:
         render_info_tab(astronaut_card_b64)
 
     # ── Footer ───────────────────────────────────────────────────────────
