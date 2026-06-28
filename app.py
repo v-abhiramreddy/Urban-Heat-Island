@@ -2291,7 +2291,7 @@ def render_predictor_tab(ctx, model, scaler, metadata):
                     st.markdown(f"""
                     <div class="metric-card" style="border-top: 3.5px solid #FF9933; padding: 1.25rem 1rem;">
                         <div style="font-size: 1.1rem; font-weight: 800; color: #FF9933; margin-bottom: 0.4rem; letter-spacing: 0.5px;">Zone {i+1}</div>
-                        <div style="font-size: 1.0rem; font-weight: 600; color: #ffffff; margin-bottom: 0.3rem; font-family: 'Syne', sans-serif;">{lst_val:.1f}°C</div>
+                        <div style="font-size: 1.0rem; font-weight: 600; color: #ffffff; margin-bottom: 0.3rem;">{lst_val:.1f}°C</div>
                         <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1rem; font-family: monospace; font-weight: 500;">{lat_val:.4f}°N, {lon_val:.4f}°E</div>
                         <div style="font-size: 0.9rem; color: #ffffff; font-weight: 400; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.8rem;">{interventions[i]}</div>
                     </div>
