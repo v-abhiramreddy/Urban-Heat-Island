@@ -3,164 +3,172 @@
 
 A geospatial AI/ML system that identifies urban heat stress hotspots, quantifies key drivers of urban heating, and generates optimized scenario-based cooling interventions — backed by physics-informed decision-making.
 
-**Live Demo:** [https://urban-heat-island-spfvstymdsbq5zocoqb8bu.streamlit.app]
+**Live Demo:** [Streamlit Cloud Deployment]
+
+---
+
+## 🏗️ Architecture Overview
+
+```mermaid
+graph TD
+    A["Landsat 8/9 C2 L2<br/>(Google Earth Engine)"] --> C["Feature Extraction<br/>NDVI, NDWI, NDBI, Albedo, MNDWI"]
+    B["ECMWF ERA5-Land"] --> C
+    C --> D["XGBoost Regressor<br/>(R²=0.713, RMSE=1.93°C)"]
+    C --> E["Physics-Informed Neural Network<br/>(PINN — 64→32→16→1)"]
+    D --> F["SHAP TreeExplainer<br/>Feature Attribution"]
+    D --> G["60×60 Spatial Grid<br/>Heatmap Predictions"]
+    G --> H["Folium Interactive Map"]
+    F --> I["Streamlit Dashboard"]
+    H --> I
+    E --> I
+```
+
+| Component | Technology | Purpose |
+|-----------|-----------|---------|
+| **Frontend** | Streamlit + Custom HTML/CSS | Dark glassmorphism UI with Syne + Outfit fonts |
+| **ML Model** | XGBoost (scikit-learn) | Primary LST prediction from 5 spectral indices |
+| **Physics Model** | PyTorch PINN | Physics-constrained comparison model |
+| **Explainability** | SHAP TreeExplainer | Per-feature warming/cooling attribution |
+| **Maps** | Folium + Leaflet.js | Interactive geospatial heatmaps |
+| **Charts** | Plotly | Historical trend visualizations |
+| **Data** | Landsat 8/9 + ERA5 | Satellite imagery + reanalysis climate data |
 
 ---
 
 ## 🏙️ Cities Covered
-| City | Climate Zone | Data Period |
-|------|-------------|-------------|
-| Hyderabad | Semi-arid | Apr–Jun 2025 |
-| Delhi | Hot semi-arid | Apr–Jun 2025 |
-| Mumbai | Tropical wet | Mar–May 2025 |
-| Chennai | Tropical wet-dry | Apr–Jun 2025 |
+| City | Climate Zone | Data Period | Population | description |
+|------|-------------|-------------|------------|-------------|
+| **Hyderabad** | Semi-arid | Apr–Jun 2025 | 10.5M | Fastest-growing tech hub with significant UHI effects in the HITEC City and Secunderabad corridors. |
+| **Delhi** | Hot semi-arid | Apr–Jun 2025 | 32.9M | Experiences extreme UHI intensity (5–10°C above rural) during peak summer, with severe hotspots in Old Delhi, Anand Vihar, and industrial zones. |
+| **Mumbai** | Tropical wet | Mar–May 2025 | 21.7M | Coastal location moderates UHI effects, but dense built-up areas in Dharavi, Kurla, and Andheri show significant heat intensification. |
+| **Chennai** | Tropical wet-dry | Apr–Jun 2025 | 11.5M | Rapid coastal urbanization creates hotspots in T. Nagar, Ambattur industrial estate, and Guindy despite coastal moderation. |
 
 ---
 
-## 🔧 System Architecture
+## 📍 Dashboard Interface Controls
 
-### Layer 1 — Data Pipeline (Google Earth Engine)
-- **Landsat 8/9 C02 T1 L2** — Land Surface Temperature (ST_B10), spectral bands
-- **ECMWF ERA5-Land** — Air temperature per city (monthly aggregates)
-- Cloud masking via QA_PIXEL bitmask, scale factors applied per USGS spec
-- 5,000 sampled points per city with spatial coordinates preserved
+### 1. Planning Bar (Top Controls)
+- **Location Type**: Switch between `Preset City` (4 predefined cities) or `Custom Location` (anywhere in India via coordinates).
+- **Custom Coordinates**: Specify Latitude and Longitude with boundary validation.
+- **PINN Comparison**: Enable/disable the PyTorch Physics-Informed Neural Network comparison panel alongside XGBoost.
+- **Vulnerability Overlay**: Overlay population-weighted vulnerability markers on the map to pinpoint high-risk community zones.
 
-### Layer 2 — Feature Engineering
-| Feature | Description | Source |
-|---------|-------------|--------|
-| LST | Land Surface Temperature (°C) | Landsat thermal |
-| NDVI | Vegetation index | Landsat B5/B4 |
-| NDWI | Water index | Landsat B3/B5 |
-| NDBI | Built-up index | Landsat B6/B5 |
-| MNDWI | Modified water index (SWIR) | Landsat B3/B6 |
-| Albedo | Surface shortwave reflectance | Liang (2001) formula |
-
-### Layer 3 — ML Models
-
-#### XGBoost Driver Model
-- Trained on **20,164 samples** across all 4 cities
-- **R² = 0.713 | RMSE = 1.93°C**
-- Per-city stratified spatial block split (prevents data leakage from neighboring pixels)
-- SHAP values for feature attribution per prediction
-
-#### Physics-Informed Neural Network (PINN)
-- Architecture: 64 → 32 → 16 → 1 (ReLU activations)
-- Physics constraint: evaporative cooling penalty (Penman–Monteith approximation)
-- Trained weights: `pinn_model.pth` | **R² = 0.599 | RMSE = 3.02°C**
-- Intentionally trades accuracy for physical consistency — penalizes predictions that violate energy balance constraints
-
-### Layer 4 — Physics-Informed Constraints
-- Surface energy balance equation: Rn = H + LE + G
-- Evaporative cooling modeled via NDVI-based constraint
-- PINN loss = Data MSE + 0.1 × Physics violation penalty
-
-### Layer 5 — Scenario Engine & Savings Quantifier
-Three pre-defined cooling interventions with quantified ΔT:
-- 🌳 **Plant Urban Forest** — NDVI +0.15, NDBI −0.05
-- 🏠 **Install Cool Roofs** — NDWI +0.05, NDBI −0.10
-- 💧 **Restore Water Body** — NDWI +0.12, NDBI −0.03
-- **Custom Scenario Engine**: Slide controls to simulate custom parameter adjustments.
-- **🌱 Quantified Savings Estimator**: Calculates cooling energy savings (MWh/day), avoided carbon emissions (tCO₂/yr), and financial cost savings (Lakhs/yr) across 10 km² based on EPA guidelines and CEA Indian grid factors.
-
-### Layer 6 — Heat Stress & Spatial Recommendations
-- **Heat Stress Index** — LST-adjusted approximation combining air temperature and radiant heat load.
-- Thresholds based on general outdoor heat stress guidelines:
-  - 🟢 < 28°C — Low risk
-  - 🟡 28–32°C — Moderate risk
-  - 🟠 32–35°C — High risk
-  - 🔴 > 35°C — Extreme risk
-- **🎯 Best Cooling Zone Recommender**: Dynamically isolates the top 3 hotspot coordinates from the 60×60 predicted spatial grid, recommends specific interventions, and displays them as interactive markers with toggle checkboxes in the map's native layer control.
-- **🏙️ City Comparison**: Dedicated side-by-side comparative panel listing current LST, heat stress risk levels, primary heat drivers, and historical warming trends across Hyderabad, Delhi, Mumbai, and Chennai.
-- **📄 Downloadable Analysis Report**: Text-based analysis reports outlining spatial model outputs, SHAP attributions, heat stress indices, and recommended interventions.
-
-## 📈 UHI & Vegetation (NDVI) Temporal Trend (2017–2025)
-A side-by-side historical trend analysis reveals the direct causal link between urban greening (NDVI) and surface temperature (LST) mitigation.
-
-| City | LST Slope (°C/yr) | LST p-value | NDVI Slope (/yr) | Correlation (r) | Greening Status | Thermal Status |
-|------|-------------------|-------------|------------------|-----------------|-----------------|----------------|
-| Hyderabad | −0.565 | 0.015 | +0.0101 | −0.982 | 📈 Greening | ❄️ Cooling |
-| Delhi | −0.733 | 0.126 | +0.0018 | −0.832 | 📈 Greening | ❄️ Cooling |
-| Mumbai | −0.200 | 0.494 | +0.0019 | −0.718 | 📈 Greening | ❄️ Cooling |
-| Chennai | −0.026 | 0.932 | +0.0011 | −0.897 | 📈 Greening | ❄️ Cooling |
-
-### Causal Evidence:
-- **Hyderabad's Strong Greening/Cooling Link**: Hyderabad exhibits a statistically significant cooling trend of **−0.565°C/year** ($p < 0.05$) strongly correlated ($r \approx -0.98$) with a vegetation canopy increase of **+0.0101 NDVI/year** driven by HMDA's Haritha Haram urban forestry initiatives.
-- **Negative Correlation ($r < 0$)**: All 4 cities demonstrate a strong inverse correlation, providing empirical verification that expanding green infrastructure directly mitigates urban heat islands.
+### 2. Sidebar Environmental Drivers (Real-time Sliders)
+Adjust parameters to simulate custom microclimate scenarios:
+- 🌿 **NDVI** (Normalized Difference Vegetation Index): Healthy green cover. Higher = cools via shading & evapotranspiration.
+- 💧 **NDWI** (Normalized Difference Water Index): Surface water/moisture. Higher = cools via evaporation.
+- 🏗️ **NDBI** (Normalized Difference Built-up Index): Concrete/pavement density. Higher = traps heat.
+- ☀️ **Albedo** (Surface Reflectivity): Solar reflection. Lower = absorbs solar radiation, increasing LST.
+- 🌊 **MNDWI** (Modified NDWI): Noise-free urban water index for identifying lakes and rivers.
 
 ---
 
-## 🚀 Deployment
+## 📊 Comprehensive Feature Walkthrough
+
+### 1. Simulation Dashboard Tab
+This is the core workspace containing:
+- **Real-time Prediction Cards**: Displays predicted LST, deviation from city mean, heat risk classification, and the primary driving feature.
+- **Heat Stress Index (WBGT)**: LST-adjusted Wet Bulb Globe Temperature approximation to measure heat hazard.
+  - 🟢 `< 28°C` — Low risk
+  - 🟡 `28–32°C` — Moderate risk
+  - 🟠 `32–35°C` — High risk
+  - 🔴 `> 35°C` — Extreme risk (Outdoor work dangerous)
+- **Interactive Geospatial Heatmap**: Folium heatmap overlay representing LST distribution on a 60x60 grid with satellite and dark map toggle controls.
+- **🎯 Top 3 Priority Intervention Zones**: Automatically isolates the 3 highest temperature hotspots in the city coordinates for priority cooling projects.
+- **Upcoming Mitigation Projects**: Selectable preset cards to run simulations:
+  - 🌳 *Plant Urban Forest* (NDVI +0.15, NDBI -0.05)
+  - 🏗️ *Install Cool Roofs* (NDWI +0.05, NDBI -0.10)
+  - 🌊 *Restore Water Body* (NDWI +0.12, NDBI -0.03)
+- **🌱 Quantified Savings Card**: Computes daily cooling energy savings (MWh/day), avoided carbon emissions (tCO₂/yr), and financial cost savings (Lakhs/yr) across a 10 km² zone using EPA and Indian power tariff models.
+- **🔍 SHAP Feature Attribution**: Interactive bar chart displaying feature contributions pushing temperatures up (saffron/warming) or down (cyan/cooling).
+- **📄 Downloadable Analysis Report**: Generates and downloads a complete plain-text diagnostics report with model parameters, SHAP rankings, and action items.
+
+### 2. City Comparison Tab
+Compares Hyderabad, Delhi, Mumbai, and Chennai side-by-side:
+- Mean LST & Heat Risk levels.
+- Primary environmental driver (e.g., low albedo or high built-up index).
+- Historical temporal trend slope.
+
+### 3. Temporal Trends Tab
+- **LST vs. NDVI Dual-Charts**: Side-by-side Plotly charts plotting LST trend alongside NDVI greening trend from 2017 to 2025.
+- **Correlation Analysis**: Computes Pearson correlation coefficient ($r$) dynamically. Shows strong causal evidence ($r \approx -0.98$ in Hyderabad) demonstrating how vegetation expansion (greening) directly cools the city.
+
+---
+
+## 🏆 Recommended Judge Demo Flow
+1. **Onboarding**: Start at the **How to Use** tab to show the structural setup guide.
+2. **Geospatial Hotspots**: Go to **Simulation Dashboard** and select **Hyderabad** -> Point out the ** Folium Heatmap** and the **🎯 Top 3 Priority Intervention Zones** dynamically extracted below the map.
+3. **Run Interventions**: Click **"Simulate Urban Forest"** -> Watch LST metrics decrease and review the **🌱 Quantified Savings** card showing MWh energy saved and carbon offset.
+4. **Inspect Causality**: Switch to **Temporal Trends** -> Point out the LST↓ vs. NDVI↑ charts showing a negative correlation ($r \approx -0.98$) from historical satellite data.
+5. **Offline Handout**: Click **"Download Full Analysis Report (.txt)"** to save the diagnostics summary locally.
+
+---
+
+## 🚀 Local Installation & Deployment
 
 ### Requirements
-```
-streamlit
-pandas
-numpy
-scikit-learn
-xgboost
-shap
-plotly
-joblib
-folium
-streamlit-folium
-torch
-scipy
+Ensure you have Python 3.10+ and install dependencies:
+```bash
+pip install -r requirements.txt
 ```
 
 ### Run Locally
 ```bash
-git clone <repo-url>
+git clone <your-repo-url>
 cd isro-uhi-predictor
-pip install -r requirements.txt
 streamlit run app.py
 ```
 
-### Required Files
-```
-app.py
-xgb_model.pkl
-scaler.pkl
-model_metadata.pkl
-model_metadata.json (optional)
-X_test_sample.pkl
-pinn_model.pth
-pinn_artifacts.pkl
-uhi_trend_hyderabad.csv / _meta.json
-uhi_trend_delhi.csv / _meta.json
-uhi_trend_mumbai.csv / _meta.json
-uhi_trend_chennai.csv / _meta.json
-assets/ (folder containing UI images) OR place the images directly in the root directory
-```
+### Required Model Binaries & Datasets
+Make sure the following files are in the root directory:
+- `xgb_model.pkl` (Trained XGBoost Regressor)
+- `scaler.pkl` (StandardScaler for inference)
+- `model_metadata.pkl` (Feature stats, city metadata, baseline metrics)
+- `X_test_sample.pkl` (Background sample for SHAP calculations)
+- `pinn_model.pth` / `pinn_artifacts.pkl` (PINN network weights & scalers)
+- `uhi_trend_*.csv` / `uhi_trend_*_meta.json` (Per-city historical datasets)
 
 ---
 
 ## 📁 Repository Structure
 ```
-├── assets/                       # Background/Capsule image assets (Optional - can also place images directly in root)
-├── app.py                        # Streamlit dashboard
-├── FINALISRO.ipynb               # GEE data pipeline + model training
-├── multi_city_data.csv           # Combined raw training dataset
-├── data_*.csv                    # Individual city raw training datasets
-├── xgb_model.pkl                 # Trained XGBoost model
-├── scaler.pkl                    # StandardScaler (spectral features only)
-├── model_metadata.pkl/json       # Feature stats, city encodings, metrics
+├── app.py                        # Streamlit dashboard application
+├── xgb_model.pkl                 # Trained XGBoost model binary
+├── scaler.pkl                    # StandardScaler for spectral features
+├── model_metadata.pkl            # Feature stats, city encodings, metrics
 ├── X_test_sample.pkl             # Scaled test sample for SHAP background
-├── pinn_model.pth                # Trained PINN weights
+├── pinn_model.pth                # Trained PINN PyTorch weights
 ├── pinn_artifacts.pkl            # PINN scalers and architecture info
-├── uhi_trend_*.csv               # Per-city temporal trend data
-├── uhi_trend_*_meta.json         # Per-city trend statistics
-└── requirements.txt
+├── uhi_trend_*.csv               # Per-city temporal trend datasets
+├── uhi_trend_*_meta.json         # Per-city trend linear regression stats
+├── requirements.txt              # Dependency file
+└── FINALISRO.ipynb               # GEE data pipeline & model training notebook
 ```
 
 ---
 
-## 🔬 Validation Notes
-- Train/test split uses **per-city spatial block GroupShuffleSplit** — entire spatial blocks go to either train or test, never split across both, preventing leakage from spatially correlated pixels
-- XGBoost trained on **scaled spectral features only** — `city_encoded` passed raw (categorical integer, not scaled)
-- SHAP TreeExplainer background uses scaled data matching inference-time inputs
-- PINN uses separate StandardScaler fitted only on training split
+## 🔬 System Pipeline & Validation
+
+### Layer 1 — Data Pipeline (Google Earth Engine)
+- **Landsat 8/9 C02 T1 L2**: Surface Temperature (ST_B10) & spectral bands.
+- **ECMWF ERA5-Land**: Air temperature at 2-meter heights.
+- Cloud masking via `QA_PIXEL` bitmask, scale factors applied per USGS specification.
+
+### Layer 2 — Feature Engineering
+- **LST**: Target land surface temperature.
+- **NDVI**: $(NIR - Red) / (NIR + Red)$
+- **NDWI**: $(Green - NIR) / (Green + NIR)$
+- **NDBI**: $(SWIR - NIR) / (SWIR + NIR)$
+- **MNDWI**: $(Green - SWIR) / (Green + SWIR)$
+- **Albedo**: Broadband shortwave reflectivity calculated via Liang (2001) formula.
+
+### Layer 3 — ML Validation
+- **Spatial Block Cross-Validation**: Data split is structured by per-city spatial blocks using a `GroupShuffleSplit` strategy to prevent leakage from spatially correlated neighbor pixels.
+- **XGBoost Driver Model**: Trained on 20,164 spatial samples. $R^2 = 0.713$, $RMSE = 1.93^\circ\text{C}$.
+- **Physics-Informed Constraints (PINN)**: Built in PyTorch with architecture (64 → 32 → 16 → 1). Optimized using Penman-Monteith evaporative cooling equations to penalize predictions violating physical energy balance.
 
 ---
 
-## 👨‍💻 Author
-**Team-Antariksh Vision** —ISRO × Hack2Skill 2026 Submission
+## 👨‍💻 Submission Info
+- **Team**: Antariksh Vision
+- **Hackathon**: Bharatiya Antariksh Hackathon 2026 — ISRO × Hack2Skill
