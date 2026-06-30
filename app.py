@@ -148,7 +148,16 @@ st.markdown("""
 }
 
 /* Light Theme Variables */
-[data-theme="light"], [data-theme="light"] *, .light-theme, .light-theme * {
+[data-theme="light"], 
+[data-theme="light"] *, 
+.light-theme, 
+.light-theme *, 
+body[class*="light"], 
+body[class*="light"] *, 
+html[class*="light"], 
+html[class*="light"] *,
+.stApp[class*="light"],
+.stApp[class*="light"] * {
     --bg-primary: #f9fafb;
     --bg-card: rgba(255, 255, 255, 0.95);
     --bg-card-hover: rgba(243, 244, 246, 0.95);
@@ -170,7 +179,16 @@ st.markdown("""
 }
 
 /* Dark Theme Variables */
-[data-theme="dark"], [data-theme="dark"] *, .dark-theme, .dark-theme * {
+[data-theme="dark"], 
+[data-theme="dark"] *, 
+.dark-theme, 
+.dark-theme *, 
+body[class*="dark"], 
+body[class*="dark"] *, 
+html[class*="dark"], 
+html[class*="dark"] *,
+.stApp[class*="dark"],
+.stApp[class*="dark"] * {
     --bg-primary: #050508;
     --bg-card: rgba(13, 13, 22, 0.7);
     --bg-card-hover: rgba(22, 22, 35, 0.85);
