@@ -205,6 +205,11 @@ html, body, [data-testid="stAppViewContainer"], .stApp {
     color: var(--text-primary) !important;
 }
 
+/* Make main content area and sidebar sub-panels transparent so they don't block the themed background */
+.main, section.main, [data-testid="stMain"], [data-testid="stSidebarUserContent"], section[data-testid="stSidebar"] > div {
+    background-color: transparent !important;
+}
+
 [data-testid="stAppViewContainer"], .stApp {
     background-color: var(--bg-primary) !important;
     background-size: cover !important;
