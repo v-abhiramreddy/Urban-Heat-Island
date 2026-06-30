@@ -137,6 +137,10 @@ if st.session_state.theme == 'light':
     sidebar_border = "rgba(0, 0, 0, 0.08)"
     bg_svg_stroke_orange = "rgba(217, 119, 6, 0.015)"
     bg_svg_stroke_white = "rgba(0, 0, 0, 0.01)"
+    card_overlay = "linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.92) 100%)"
+    card_overlay_hover = "linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.96) 100%)"
+    card_stroke = "rgba(0, 0, 0, 0.18)"
+    founder_overlay = "linear-gradient(90deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.96) 100%)"
 else:
     bg_primary = "#050508"
     bg_card = "rgba(13, 13, 22, 0.7)"
@@ -154,6 +158,10 @@ else:
     sidebar_border = "rgba(255, 255, 255, 0.04)"
     bg_svg_stroke_orange = "rgba(249, 115, 22, 0.03)"
     bg_svg_stroke_white = "rgba(255, 255, 255, 0.015)"
+    card_overlay = "linear-gradient(180deg, rgba(5,5,8,0.2) 0%, rgba(5,5,8,0.9) 100%)"
+    card_overlay_hover = "linear-gradient(180deg, rgba(5,5,8,0) 0%, rgba(5,5,8,0.95) 100%)"
+    card_stroke = "rgba(255,255,255,0.35)"
+    founder_overlay = "linear-gradient(90deg, rgba(5,5,8,0.7) 0%, rgba(5,5,8,0.95) 100%)"
 
 st.markdown(f"""
 <style>
@@ -172,6 +180,10 @@ st.markdown(f"""
     --text-primary: {text_primary};
     --text-secondary: {text_secondary};
     --border-subtle: {border_subtle};
+    --card-overlay: {card_overlay};
+    --card-overlay-hover: {card_overlay_hover};
+    --card-stroke: {card_stroke};
+    --founder-overlay: {founder_overlay};
 }}
 
 html, body, [data-testid="stAppViewContainer"] {{
@@ -555,7 +567,7 @@ div[data-testid="stTabBar"] {
 .intervention-card {
     flex: 1;
     border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-subtle);
     background-size: cover;
     background-position: center;
     padding: 2.2rem 1.2rem 1.2rem 1.2rem;
@@ -566,13 +578,13 @@ div[data-testid="stTabBar"] {
     position: relative;
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 }
 .intervention-card::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(180deg, rgba(5,5,8,0.15) 0%, rgba(5,5,8,0.85) 100%);
+    background: var(--card-overlay) !important;
     z-index: 1;
     transition: all 0.4s ease;
 }
@@ -582,25 +594,25 @@ div[data-testid="stTabBar"] {
 }
 .intervention-card:hover {
     transform: translateY(-5px);
-    border-color: #f97316;
+    border-color: var(--accent-orange);
     box-shadow: 0 8px 25px rgba(249, 115, 22, 0.2);
 }
 .intervention-card:hover::before {
-    background: linear-gradient(180deg, rgba(5,5,8,0) 0%, rgba(5,5,8,0.95) 100%);
+    background: var(--card-overlay-hover) !important;
 }
 .card-outline-text {
     font-family: 'Syne', sans-serif;
     font-size: 2rem;
     font-weight: 800;
     color: transparent;
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.35);
+    -webkit-text-stroke: 1px var(--card-stroke);
     letter-spacing: 0.05em;
     margin-bottom: 0.4rem;
     line-height: 1.1;
     text-transform: uppercase;
 }
 .intervention-card:hover .card-outline-text {
-    -webkit-text-stroke: 1px #f97316;
+    -webkit-text-stroke: 1px var(--accent-orange);
 }
 .card-title {
     font-family: 'Syne', sans-serif;
@@ -774,7 +786,7 @@ div[data-testid="stTabBar"] {
 }
 
 .city-info-banner {
-    background: linear-gradient(135deg, rgba(13,13,22,0.8) 0%, rgba(22,22,35,0.6) 100%) !important;
+    background: var(--bg-card) !important;
     border: 1px solid var(--border-subtle) !important;
     border-radius: 16px !important;
     padding: 1rem 1.5rem !important;
@@ -782,7 +794,7 @@ div[data-testid="stTabBar"] {
 }
 
 .map-container {
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid var(--border-subtle) !important;
     border-radius: 16px !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
 }
@@ -801,10 +813,27 @@ div[data-testid="stTabBar"] {
     text-align: center !important;
     padding: 1.5rem 0 0.8rem 0 !important;
     font-size: 0.72rem !important;
-    border-top: 1px solid rgba(255,255,255,0.05) !important;
+    border-top: 1px solid var(--border-subtle) !important;
     margin-top: 2.5rem !important;
     color: var(--text-secondary) !important;
     opacity: 0.6 !important;
+}
+
+/* Style all Streamlit buttons dynamically */
+div.stButton > button {
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 600 !important;
+}
+div.stButton > button:hover {
+    border-color: var(--accent-orange) !important;
+    color: var(--accent-orange) !important;
+    background-color: var(--bg-card-hover) !important;
+    transform: translateY(-1px) !important;
 }
 
 /* Responsive adjustments for mobile screens */
@@ -1629,29 +1658,29 @@ def render_city_comparison(model, scaler, metadata, explainer, feature_cols, cit
     rows_html = ""
     for c in comparison_data:
         rows_html += (
-            f'<tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">'
-            f'<td style="padding: 1rem 1.2rem; font-weight: 700; color: #f1f5f9; font-family: \'Syne\', sans-serif;">{c["city"]}</td>'
+            f'<tr style="border-bottom: 1px solid var(--border-subtle);">'
+            f'<td style="padding: 1rem 1.2rem; font-weight: 700; color: var(--text-primary); font-family: \'Syne\', sans-serif;">{c["city"]}</td>'
             f'<td style="padding: 1rem 1.2rem; font-size: 1.1rem; font-weight: 800; color: #FF9933;">{c["lst"]}</td>'
             f'<td style="padding: 1rem 1.2rem;">'
             f'<span style="background: {c["risk_color"]}20; color: {c["risk_color"]}; border: 1px solid {c["risk_color"]}40; padding: 0.25rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.3rem;">'
             f'<span>{c["risk_icon"]}</span> {c["risk_label"]}'
             f'</span>'
             f'</td>'
-            f'<td style="padding: 1rem 1.2rem; color: #cbd5e1; font-size: 0.88rem;">{c["driver"]}</td>'
+            f'<td style="padding: 1rem 1.2rem; color: var(--text-secondary); font-size: 0.88rem;">{c["driver"]}</td>'
             f'<td style="padding: 1rem 1.2rem; color: #ef4444; font-weight: 700; font-size: 0.88rem;">📈 {c["trend"]}</td>'
             f'</tr>'
         )
         
     table_html = (
-        f'<div style="background: rgba(13, 13, 22, 0.45); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 0; overflow: hidden; margin-top: 1rem; margin-bottom: 2rem;">'
+        f'<div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 0; overflow: hidden; margin-top: 1rem; margin-bottom: 2rem;">'
         f'<table style="width: 100%; border-collapse: collapse; text-align: left;">'
         f'<thead>'
-        f'<tr style="background: rgba(255, 255, 255, 0.03); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">'
-        f'<th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">City</th>'
-        f'<th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Current LST (Mean)</th>'
-        f'<th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Heat Stress Risk</th>'
-        f'<th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Primary Heat Driver</th>'
-        f'<th style="padding: 1rem 1.2rem; color: #94a3b8; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Warming Trend</th>'
+        f'<tr style="background: var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">'
+        f'<th style="padding: 1rem 1.2rem; color: var(--text-secondary); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">City</th>'
+        f'<th style="padding: 1rem 1.2rem; color: var(--text-secondary); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Current LST (Mean)</th>'
+        f'<th style="padding: 1rem 1.2rem; color: var(--text-secondary); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Heat Stress Risk</th>'
+        f'<th style="padding: 1rem 1.2rem; color: var(--text-secondary); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Primary Heat Driver</th>'
+        f'<th style="padding: 1rem 1.2rem; color: var(--text-secondary); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Warming Trend</th>'
         f'</tr>'
         f'</thead>'
         f'<tbody>'
@@ -1953,39 +1982,39 @@ margin-bottom:16px;">
     with tabs[0]:
         # ── User Manual / How to Use Section ──────────────────────────────────
         st.markdown("""
-        <div class="insight-box" style="border-left-color: #f59e0b; margin-bottom: 2rem; padding: 1.8rem 2.2rem !important; min-height: 400px; background: rgba(13, 13, 22, 0.6) !important;">
-            <h2 style="margin-top: 0; color: #f1f5f9; font-size: 1.5rem; display: flex; align-items: center; gap: 0.6rem; font-family: 'Outfit', sans-serif; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.8rem; margin-bottom: 1.5rem;">
+        <div class="insight-box" style="border-left-color: #f59e0b; margin-bottom: 2rem; padding: 1.8rem 2.2rem !important; min-height: 400px; background: var(--bg-card) !important;">
+            <h2 style="margin-top: 0; color: var(--text-primary); font-size: 1.5rem; display: flex; align-items: center; gap: 0.6rem; font-family: 'Outfit', sans-serif; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.8rem; margin-bottom: 1.5rem;">
                 📖 Dashboard User Manual
             </h2>
-            <p style="color: #cbd5e1; font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">
+            <p style="color: var(--text-secondary); font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.6;">
                 Quick Guide to navigate the geospatial analysis, simulations, and mitigation recommendations:
             </p>
-            <ul style="margin-bottom: 0; padding-left: 0; font-size: 0.95rem; color: #cbd5e1; line-height: 1.8; list-style-type: none;">
+            <ul style="margin-bottom: 0; padding-left: 0; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.8; list-style-type: none;">
                 <li style="margin-bottom: 1.2rem; display: flex; gap: 0.8rem; align-items: flex-start;">
                     <span style="font-size: 1.2rem; margin-top: 0.2rem;">🗺️</span>
                     <div>
-                        <strong style="font-size: 1.05rem; color: #f1f5f9; display: block; margin-bottom: 0.2rem;">1. Select Location</strong>
+                        <strong style="font-size: 1.05rem; color: var(--text-primary); display: block; margin-bottom: 0.2rem;">1. Select Location</strong>
                         Use the top <strong>Planning Bar</strong> to switch mode (Preset City or Custom Coordinates). Toggle <strong>PINN comparison</strong> or <strong>Population Vulnerability</strong> overlays to examine physical and demographic risks.
                     </div>
                 </li>
                 <li style="margin-bottom: 1.2rem; display: flex; gap: 0.8rem; align-items: flex-start;">
                     <span style="font-size: 1.2rem; margin-top: 0.2rem;">📊</span>
                     <div>
-                        <strong style="font-size: 1.05rem; color: #f1f5f9; display: block; margin-bottom: 0.2rem;">2. Simulation Dashboard</strong>
+                        <strong style="font-size: 1.05rem; color: var(--text-primary); display: block; margin-bottom: 0.2rem;">2. Simulation Dashboard</strong>
                         Real-time XGBoost predictions update automatically. Inspect the <strong>SHAP graph</strong> to see feature influences, and review the <strong>🎯 Priority Intervention Zones</strong> right below the map to target hotspots.
                     </div>
                 </li>
                 <li style="margin-bottom: 1.2rem; display: flex; gap: 0.8rem; align-items: flex-start;">
                     <span style="font-size: 1.2rem; margin-top: 0.2rem;">🚀</span>
                     <div>
-                        <strong style="font-size: 1.05rem; color: #f1f5f9; display: block; margin-bottom: 0.2rem;">3. Run Cooling Projects</strong>
+                        <strong style="font-size: 1.05rem; color: var(--text-primary); display: block; margin-bottom: 0.2rem;">3. Run Cooling Projects</strong>
                         Click preset buttons (e.g. <em>Simulate Urban Forest</em>) or adjust custom sliders to view temperature drops. Cooling triggers the <strong>🌱 Quantified Savings</strong> card (energy, carbon, cost savings).
                     </div>
                 </li>
                 <li style="margin-bottom: 1.2rem; display: flex; gap: 0.8rem; align-items: flex-start;">
                     <span style="font-size: 1.2rem; margin-top: 0.2rem;">🏙️</span>
                     <div>
-                        <strong style="font-size: 1.05rem; color: #f1f5f9; display: block; margin-bottom: 0.2rem;">4. Compare & Download</strong>
+                        <strong style="font-size: 1.05rem; color: var(--text-primary); display: block; margin-bottom: 0.2rem;">4. Compare & Download</strong>
                         Visit the <strong>City Comparison</strong> tab to evaluate all 4 preset cities side-by-side. Click <strong>Download Full Analysis Report (.txt)</strong> at the bottom of the Simulation tab to generate offline summaries.
                     </div>
                 </li>
@@ -2241,10 +2270,10 @@ def render_predictor_tab(ctx, model, scaler, metadata):
                     <div class="city-info-text" style="flex: 1;">
                         <strong>Custom Location</strong> &nbsp;·&nbsp;
                         <span style="color: {within_color}; font-weight: 600;">{within_text}</span><br>
-                        <span style="font-size: 0.88rem; color: #cbd5e1;">{region_text}</span>
+                        <span style="font-size: 0.88rem; color: var(--text-secondary);">{region_text}</span>
                     </div>
                 </div>
-                <div style="margin-top: 0.8rem; padding-top: 0.6rem; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.82rem; color: #94a3b8; display: flex; align-items: center; gap: 0.4rem;">
+                <div style="margin-top: 0.8rem; padding-top: 0.6rem; border-top: 1px solid var(--border-subtle); font-size: 0.82rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.4rem;">
                     <span>ℹ️</span>
                     <span>Custom coordinate analysis operates as a point-based prediction. Regional UHI heatmaps and population vulnerability overlays are optimized for preset cities with pre-compiled spatial grids.</span>
                 </div>
@@ -2502,14 +2531,14 @@ def render_simulator_tab(ctx, model, scaler, metadata, explainer, forest_satelli
 
     # Preset Scenario Cards
     st.markdown('<div class="section-header">Upcoming Mitigation Projects</div>', unsafe_allow_html=True)
-    st.markdown('<p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 1.5rem;">Select an intervention below to simulate its cooling impact on the city microclimate.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">Select an intervention below to simulate its cooling impact on the city microclimate.</p>', unsafe_allow_html=True)
     
     col_card1, col_card2, col_card3 = st.columns(3)
     active_scenario = None
     
     with col_card1:
         st.markdown(f"""
-        <div class="intervention-card" style="background-image: linear-gradient(180deg, rgba(5,5,8,0.2) 0%, rgba(5,5,8,0.9) 100%), url(data:image/png;base64,{forest_satellite_b64});">
+        <div class="intervention-card" style="background-image: var(--card-overlay), url(data:image/png;base64,{forest_satellite_b64});">
             <div class="card-outline-text">FOREST</div>
             <div class="card-title">Plant Urban Forest</div>
             <div class="card-desc">Increase vegetation cover via urban forestry. Reduces temperature by 2–5°C.</div>
@@ -2520,7 +2549,7 @@ def render_simulator_tab(ctx, model, scaler, metadata, explainer, forest_satelli
 
     with col_card2:
         st.markdown(f"""
-        <div class="intervention-card" style="background-image: linear-gradient(180deg, rgba(5,5,8,0.2) 0%, rgba(5,5,8,0.9) 100%), url(data:image/png;base64,{cool_roofs_satellite_b64});">
+        <div class="intervention-card" style="background-image: var(--card-overlay), url(data:image/png;base64,{cool_roofs_satellite_b64});">
             <div class="card-outline-text">COOL ROOFS</div>
             <div class="card-title">Install Cool Roofs</div>
             <div class="card-desc">Replace rooftops with high-reflectance materials. Immediate effect.</div>
@@ -2531,7 +2560,7 @@ def render_simulator_tab(ctx, model, scaler, metadata, explainer, forest_satelli
 
     with col_card3:
         st.markdown(f"""
-        <div class="intervention-card" style="background-image: linear-gradient(180deg, rgba(5,5,8,0.2) 0%, rgba(5,5,8,0.9) 100%), url(data:image/png;base64,{water_satellite_b64});">
+        <div class="intervention-card" style="background-image: var(--card-overlay), url(data:image/png;base64,{water_satellite_b64});">
             <div class="card-outline-text">WATER</div>
             <div class="card-title">Restore Water Body</div>
             <div class="card-desc">Restore lakes and wetlands for natural evaporative cooling.</div>
@@ -3096,7 +3125,7 @@ def render_info_tab(astronaut_card_b64):
         <div>Per-city spatial block cross-validation</div>
     </div>
 
-    <div class="founder-card" style="background-image: linear-gradient(90deg, var(--bg-card) 0%, var(--bg-card) 100%), url(data:image/png;base64,{astronaut_card_b64}); max-width: 600px;">
+    <div class="founder-card" style="background-image: var(--founder-overlay), url(data:image/png;base64,{astronaut_card_b64}); max-width: 600px;">
         <div class="founder-info">
             <div class="founder-name" style="font-size: 1.25rem; letter-spacing: 0.5px;">
                 <span style="color: #FF9933;">Team</span>
