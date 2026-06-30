@@ -180,6 +180,23 @@ html, body, [data-testid="stAppViewContainer"] {{
     color: {text_primary} !important;
 }}
 
+[data-testid="stAppViewContainer"], .stApp {{
+    background-color: {bg_primary} !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2005/svg' width='1000' height='1000' viewBox='0 0 1000 1000'%3E%3Cpath d='M-100,200 C300,100 200,600 700,500 C1100,400 900,900 1200,800' fill='none' stroke='{bg_svg_stroke_orange}' stroke-width='1.5'/%3E%3Cpath d='M-100,400 C400,200 300,800 800,600 C1200,500 1000,1100 1300,1000' fill='none' stroke='{bg_svg_stroke_orange}' stroke-width='1'/%3E%3Cpath d='M-100,50 C200,-50 100,300 500,250 C800,200 700,600 1000,550' fill='none' stroke='{bg_svg_stroke_white}' stroke-width='1'/%3E%3Cpath d='M200,800 C400,700 300,1100 800,900 C1100,800 1000,1200 1200,1100' fill='none' stroke='{bg_svg_stroke_orange}' stroke-width='1'/%3E%3C/svg%3E") !important;
+    background-size: cover !important;
+    background-attachment: fixed !important;
+}}
+
+section[data-testid="stSidebar"] {{
+    background: {sidebar_bg} !important;
+    border-right: 1px solid {sidebar_border} !important;
+}}
+</style>
+""", unsafe_allow_html=True)
+
+# ── Static CSS ───────────────────────────────────────────────────────────────
+st.markdown("""
+<style>
 /* Prevent icon font-family overrides that leak raw ligature text like keyboard_double */
 .material-icons,
 [class*="Icon"],
@@ -198,26 +215,14 @@ button[aria-label*="Open"] *,
 button[aria-label*="Collapse"] *,
 [data-testid="stSidebarCollapseButton"] *,
 [data-testid="baseButton-header"] *,
-button[kind="headerNoPadding"] * {{
+button[kind="headerNoPadding"] * {
     font-family: "Material Icons", "Material Symbols Outlined", "Material Symbols Rounded", "Source Sans Pro", sans-serif !important;
-}}
+}
 
-[data-testid="stAppViewContainer"], .stApp {{
-    background-color: {bg_primary} !important;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2005/svg' width='1000' height='1000' viewBox='0 0 1000 1000'%3E%3Cpath d='M-100,200 C300,100 200,600 700,500 C1100,400 900,900 1200,800' fill='none' stroke='{bg_svg_stroke_orange}' stroke-width='1.5'/%3E%3Cpath d='M-100,400 C400,200 300,800 800,600 C1200,500 1000,1100 1300,1000' fill='none' stroke='{bg_svg_stroke_orange}' stroke-width='1'/%3E%3Cpath d='M-100,50 C200,-50 100,300 500,250 C800,200 700,600 1000,550' fill='none' stroke='{bg_svg_stroke_white}' stroke-width='1'/%3E%3Cpath d='M200,800 C400,700 300,1100 800,900 C1100,800 1000,1200 1200,1100' fill='none' stroke='{bg_svg_stroke_orange}' stroke-width='1'/%3E%3C/svg%3E") !important;
-    background-size: cover !important;
-    background-attachment: fixed !important;
-}}
-
-.main .block-container {{
+.main .block-container {
     padding-top: 1rem;
     max-width: 1300px;
-}}
-
-section[data-testid="stSidebar"] {{
-    background: {sidebar_bg} !important;
-    border-right: 1px solid {sidebar_border} !important;
-}}
+}
 section[data-testid="stSidebar"] .stSlider label,
 section[data-testid="stSidebar"] p,
 section[data-testid="stSidebar"] span:not(button *):not([data-testid*="Collapse"] *):not([data-testid*="Sidebar"] *):not([class*="Icon"]):not([class*="icon"]):not(.material-icons) {{
