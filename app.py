@@ -209,6 +209,14 @@ st.markdown(f"""
     --founder-overlay: {founder_overlay};
 }}
 
+/* Force Streamlit native widgets (selectbox, slider, sidebar, etc.) to use our variables */
+:root, [data-theme="light"], [data-theme="dark"], [data-testid="stAppViewContainer"], [data-testid="stHeader"] {{
+    --backgroundColor: {bg_primary} !important;
+    --textColor: {text_primary} !important;
+    --secondaryBackgroundColor: {bg_card} !important;
+    --primaryColor: {accent_orange} !important;
+}}
+
 html, body, [data-testid="stAppViewContainer"] {{
     font-family: 'Outfit', sans-serif !important;
     background-color: {bg_primary} !important;
