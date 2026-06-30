@@ -1351,16 +1351,16 @@ def render_savings_estimate(delta_lst, border_color="#10b981"):
     
     st.markdown(f"""
     <div class="insight-box" style="border-left-color: {border_color}; margin-top: 1rem; margin-bottom: 1.5rem; padding: 1.2rem 1.5rem;">
-        <h4 style="margin: 0 0 0.6rem 0; color: #ffffff; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 700;">
+        <h4 style="margin: 0 0 0.6rem 0; color: var(--text-primary); font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 700;">
             🌱 Quantified Environmental & Economic Impact (Across 10 km²)
         </h4>
-        <p style="color: #cbd5e1; font-size: 0.98rem; margin-bottom: 1rem; line-height: 1.5;">
+        <p style="color: var(--text-secondary); font-size: 0.98rem; margin-bottom: 1rem; line-height: 1.5;">
             A predicted <strong>{dT:.1f}°C LST reduction</strong> across a standard 10 km² urban zone yields the following estimated savings:
         </p>
-        <ul style="margin: 0; padding-left: 1.5rem; font-size: 1.0rem; color: #ffffff; line-height: 1.8;">
-            <li style="margin-bottom: 0.4rem;">⚡ <strong>Cooling Energy:</strong> ~{energy_savings:.1f} MWh/day saved <span style="color: #cbd5e1; font-size: 0.85rem; opacity: 0.85; margin-left: 5px;">(EPA Guideline: ~1.5% cooling load drop per 1°C ambient cooling)</span></li>
-            <li style="margin-bottom: 0.4rem;">📉 <strong>Carbon Offset:</strong> ~{co2_savings:.1f} tonnes CO₂/year avoided <span style="color: #cbd5e1; font-size: 0.85rem; opacity: 0.85; margin-left: 5px;">(CEA India Grid Factor: ~0.82 tCO₂/MWh)</span></li>
-            <li>💰 <strong>Economic Savings:</strong> ~₹{cost_savings:.1f} Lakhs/year <span style="color: #cbd5e1; font-size: 0.85rem; opacity: 0.85; margin-left: 5px;">(Based on commercial power tariff of ₹8.2/kWh)</span></li>
+        <ul style="margin: 0; padding-left: 1.5rem; font-size: 1.0rem; color: var(--text-primary); line-height: 1.8;">
+            <li style="margin-bottom: 0.4rem;">⚡ <strong>Cooling Energy:</strong> ~{energy_savings:.1f} MWh/day saved <span style="color: var(--text-secondary); font-size: 0.85rem; opacity: 0.85; margin-left: 5px;">(EPA Guideline: ~1.5% cooling load drop per 1°C ambient cooling)</span></li>
+            <li style="margin-bottom: 0.4rem;">📉 <strong>Carbon Offset:</strong> ~{co2_savings:.1f} tonnes CO₂/year avoided <span style="color: var(--text-secondary); font-size: 0.85rem; opacity: 0.85; margin-left: 5px;">(CEA India Grid Factor: ~0.82 tCO₂/MWh)</span></li>
+            <li>💰 <strong>Economic Savings:</strong> ~₹{cost_savings:.1f} Lakhs/year <span style="color: var(--text-secondary); font-size: 0.85rem; opacity: 0.85; margin-left: 5px;">(Based on commercial power tariff of ₹8.2/kWh)</span></li>
         </ul>
     </div>
     """, unsafe_allow_html=True)
@@ -2939,13 +2939,28 @@ def render_trends_tab():
                     showlegend=True
                 ))
                 
+        # Configure Plotly colors dynamically based on theme setting
+        if st.session_state.theme == 'light':
+            plotly_template = 'plotly'
+            plotly_bg = '#f9fafb'
+            plotly_text = '#111827'
+            plotly_grid = 'rgba(0,0,0,0.08)'
+        else:
+            plotly_template = 'plotly_dark'
+            plotly_bg = '#050508'
+            plotly_text = '#f1f5f9'
+            plotly_grid = 'rgba(255,255,255,0.08)'
+
         fig_lst.update_layout(
             title='Land Surface Temperature (LST) Trend',
-            xaxis_title='Year', yaxis_title='Mean LST (°C)', template='plotly_dark',
+            xaxis_title='Year', yaxis_title='Mean LST (°C)', template=plotly_template,
             height=400, legend=dict(orientation='h', y=-0.2, x=0),
-            paper_bgcolor='#050508', plot_bgcolor='#050508',
+            paper_bgcolor=plotly_bg, plot_bgcolor=plotly_bg,
+            font=dict(color=plotly_text),
             margin=dict(l=40, r=40, t=50, b=50)
         )
+        fig_lst.update_xaxes(gridcolor=plotly_grid)
+        fig_lst.update_yaxes(gridcolor=plotly_grid)
         st.plotly_chart(fig_lst, use_container_width=True)
         
     # ── Chart 2: NDVI Trend ──
@@ -2969,11 +2984,14 @@ def render_trends_tab():
             
         fig_ndvi.update_layout(
             title='Vegetation Index (NDVI) Greening Trend',
-            xaxis_title='Year', yaxis_title='Mean NDVI', template='plotly_dark',
+            xaxis_title='Year', yaxis_title='Mean NDVI', template=plotly_template,
             height=400, legend=dict(orientation='h', y=-0.2, x=0),
-            paper_bgcolor='#050508', plot_bgcolor='#050508',
+            paper_bgcolor=plotly_bg, plot_bgcolor=plotly_bg,
+            font=dict(color=plotly_text),
             margin=dict(l=40, r=40, t=50, b=50)
         )
+        fig_ndvi.update_xaxes(gridcolor=plotly_grid)
+        fig_ndvi.update_yaxes(gridcolor=plotly_grid)
         st.plotly_chart(fig_ndvi, use_container_width=True)
         
     # ── Summary Table ──
@@ -2994,13 +3012,48 @@ def render_trends_tab():
             'Total ΔNDVI': f"{ndvis[-1]-ndvis[0]:+.3f}",
         })
     summary_df = pd.DataFrame(summary_rows)
-    st.dataframe(summary_df, use_container_width=True, hide_index=True)
+    
+    # Custom HTML Table representation styling
+    st.markdown(f"""
+    <div class="custom-table-container">
+        {summary_df.to_html(index=False, escape=False)}
+    </div>
+    <style>
+    .custom-table-container table {{
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        font-family: 'Outfit', sans-serif;
+        color: var(--text-primary);
+        background: var(--bg-card);
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border-subtle);
+    }}
+    .custom-table-container th {{
+        background-color: var(--border-subtle);
+        color: var(--text-primary);
+        font-weight: 700;
+        text-align: left;
+        padding: 12px 14px;
+        border-bottom: 2px solid var(--border-subtle);
+    }}
+    .custom-table-container td {{
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--border-subtle);
+        color: var(--text-secondary);
+    }}
+    .custom-table-container tr:hover {{
+        background-color: var(--bg-card-hover);
+    }}
+    </style>
+    """, unsafe_allow_html=True)
 
     # ── Insight Box ──
     st.markdown("""
     <div class="insight-box" style="border-left-color: #10b981; margin-top: 1rem;">
         <strong>🔬 Causal Evidence Analysis:</strong>
-        <p style="margin: 0.4rem 0 0 0; font-size: 0.9rem; color: #cbd5e1; line-height: 1.5;">
+        <p style="margin: 0.4rem 0 0 0; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
             The side-by-side charts reveal a strong <strong>negative correlation (r ≈ -0.98)</strong> between greening and thermal accumulation, particularly in <strong>Hyderabad</strong>. 
             As the vegetation index (NDVI) increased from 0.165 to 0.246 (+49.1%), the mean Land Surface Temperature (LST) dropped by 4.8°C. This provides direct empirical validation that urban forestation and green cover expansion are highly effective causal drivers of microclimate cooling.
         </p>
@@ -3011,21 +3064,21 @@ def render_trends_tab():
 def render_info_tab(astronaut_card_b64):
     st.html(f"""
 <div class="about-section" style="max-width: 750px;">
-    <h2 class="section-title" style="margin-bottom: 0.2rem;">Project <span class="orange-text">Information</span></h2>
-    <div style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-bottom: 1.5rem; width: 100%;"></div>
+    <h2 class="section-title" style="margin-bottom: 0.2rem; color: var(--text-primary);">Project <span class="orange-text">Information</span></h2>
+    <div style="border-bottom: 1px solid var(--border-subtle); margin-bottom: 1.5rem; width: 100%;"></div>
     
-    <div style="font-family: 'Outfit', sans-serif; color: #cbd5e1; font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.8rem;">
+    <div style="font-family: 'Outfit', sans-serif; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.8rem;">
         <strong style="color: #f59e0b; font-size: 1.05rem;">About The Project</strong>
-        <p style="color: #cbd5e1; margin-top: 0.4rem; line-height: 1.6; font-size: 0.95rem;">
+        <p style="color: var(--text-secondary); margin-top: 0.4rem; line-height: 1.6; font-size: 0.95rem;">
             A geospatial AI system that identifies urban heat stress hotspots, quantifies environmental drivers using SHAP explainability, and simulates scenario-based cooling interventions using satellite data and physics-informed machine learning.
         </p>
     </div>
 
-    <div style="border-bottom: 1px dashed rgba(255, 255, 255, 0.08); margin-bottom: 1.8rem; width: 100%;"></div>
+    <div style="border-bottom: 1px dashed var(--border-subtle); margin-bottom: 1.8rem; width: 100%;"></div>
     
-    <div style="display: grid; grid-template-columns: 130px 1fr; gap: 1.4rem; font-family: 'Outfit', sans-serif; color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 2.2rem;">
+    <div style="display: grid; grid-template-columns: 130px 1fr; gap: 1.4rem; font-family: 'Outfit', sans-serif; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 2.2rem;">
         <div style="font-weight: 700; color: #f59e0b;">Problem:</div>
-        <div>Optimizing Urban Heat Mitigation via AI/ML <span style="color: #94a3b8; display: block; margin-top: 0.2rem;">— ISRO × Hack2Skill BAH 2026</span></div>
+        <div>Optimizing Urban Heat Mitigation via AI/ML <span style="color: var(--text-secondary); display: block; margin-top: 0.2rem;">— ISRO × Hack2Skill BAH 2026</span></div>
         
         <div style="font-weight: 700; color: #f59e0b;">Data:</div>
         <div>Landsat 8/9 (Google Earth Engine) + ECMWF ERA5-Land</div>
@@ -3043,11 +3096,11 @@ def render_info_tab(astronaut_card_b64):
         <div>Per-city spatial block cross-validation</div>
     </div>
 
-    <div class="founder-card" style="background-image: linear-gradient(90deg, rgba(5,5,8,0.7) 0%, rgba(5,5,8,0.95) 100%), url(data:image/png;base64,{astronaut_card_b64}); max-width: 600px;">
+    <div class="founder-card" style="background-image: linear-gradient(90deg, var(--bg-card) 0%, var(--bg-card) 100%), url(data:image/png;base64,{astronaut_card_b64}); max-width: 600px;">
         <div class="founder-info">
             <div class="founder-name" style="font-size: 1.25rem; letter-spacing: 0.5px;">
                 <span style="color: #FF9933;">Team</span>
-                <span style="color: #FFFFFF;">Antariksh</span>
+                <span style="color: var(--text-primary);">Antariksh</span>
                 <span style="color: #138808;">Vision</span>
             </div>
         </div>
