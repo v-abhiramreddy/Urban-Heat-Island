@@ -137,10 +137,10 @@ if st.session_state.theme == 'light':
     sidebar_border = "rgba(0, 0, 0, 0.08)"
     bg_svg_stroke_orange = "rgba(217, 119, 6, 0.015)"
     bg_svg_stroke_white = "rgba(0, 0, 0, 0.01)"
-    card_overlay = "linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.92) 100%)"
-    card_overlay_hover = "linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.96) 100%)"
-    card_stroke = "rgba(0, 0, 0, 0.18)"
-    founder_overlay = "linear-gradient(90deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.96) 100%)"
+    card_overlay = "linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.6) 100%)"
+    card_overlay_hover = "linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.7) 100%)"
+    card_stroke = "rgba(0, 0, 0, 0.15)"
+    founder_overlay = "linear-gradient(90deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.72) 100%)"
 else:
     bg_primary = "#050508"
     bg_card = "rgba(13, 13, 22, 0.7)"
@@ -1592,7 +1592,7 @@ research purposes. Field validation is recommended before policy action.
 def render_city_comparison(model, scaler, metadata, explainer, feature_cols, city_encoding, city_feature_stats, stats):
     st.markdown("---")
     st.markdown('<div class="section-header">🏙️ Cross-City Comparative Analysis</div>', unsafe_allow_html=True)
-    st.markdown('<p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 1.5rem;">A side-by-side comparison of baseline urban microclimate conditions, key heating drivers, and historical warming rates across the 4 primary cities.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">A side-by-side comparison of baseline urban microclimate conditions, key heating drivers, and historical warming rates across the 4 primary cities.</p>', unsafe_allow_html=True)
 
     cities = ['Hyderabad', 'Delhi', 'Mumbai', 'Chennai']
     comparison_data = []
@@ -1898,7 +1898,7 @@ margin-bottom:16px;">
         st.markdown("### \U0001F4C8 Model Info")
         cities_list = metadata.get('cities', ['Hyderabad'])
         st.markdown(
-            f'<p style="color: #94a3b8; font-size: 0.8rem;">'
+            f'<p style="color: var(--text-secondary); font-size: 0.8rem;">'
             f'<strong>Algorithm:</strong> XGBoost<br>'
             f'<strong>Cities:</strong> {", ".join(cities_list)}<br>'
             f'<strong>Samples:</strong> {metadata["n_samples"]:,}<br>'
@@ -2378,31 +2378,31 @@ def render_predictor_tab(ctx, model, scaler, metadata):
             with legend_col:
                 st.markdown("""
                 <div style="padding: 1rem;">
-                    <p style="font-weight: 700; color: #f1f5f9; font-size: 0.9rem; margin-bottom: 0.8rem;">\U0001F321\uFE0F Heat Intensity</p>
+                    <p style="font-weight: 700; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 0.8rem;">🌡️ Heat Intensity</p>
                     <div style="display: flex; flex-direction: column; gap: 0.4rem;">
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <div style="width: 16px; height: 16px; border-radius: 4px; background: #dc2626;"></div>
-                            <span style="font-size: 0.78rem; color: #94a3b8;">Extreme (>90%)</span>
+                            <span style="font-size: 0.78rem; color: var(--text-secondary);">Extreme (>90%)</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <div style="width: 16px; height: 16px; border-radius: 4px; background: #ef4444;"></div>
-                            <span style="font-size: 0.78rem; color: #94a3b8;">Very High (75-90%)</span>
+                            <span style="font-size: 0.78rem; color: var(--text-secondary);">Very High (75-90%)</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <div style="width: 16px; height: 16px; border-radius: 4px; background: #f97316;"></div>
-                            <span style="font-size: 0.78rem; color: #94a3b8;">High (60-75%)</span>
+                            <span style="font-size: 0.78rem; color: var(--text-secondary);">High (60-75%)</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <div style="width: 16px; height: 16px; border-radius: 4px; background: #eab308;"></div>
-                            <span style="font-size: 0.78rem; color: #94a3b8;">Moderate (40-60%)</span>
+                            <span style="font-size: 0.78rem; color: var(--text-secondary);">Moderate (40-60%)</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <div style="width: 16px; height: 16px; border-radius: 4px; background: #10b981;"></div>
-                            <span style="font-size: 0.78rem; color: #94a3b8;">Low (20-40%)</span>
+                            <span style="font-size: 0.78rem; color: var(--text-secondary);">Low (20-40%)</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <div style="width: 16px; height: 16px; border-radius: 4px; background: #2563eb;"></div>
-                            <span style="font-size: 0.78rem; color: #94a3b8;">Cool (<20%)</span>
+                            <span style="font-size: 0.78rem; color: var(--text-secondary);">Cool (<20%)</span>
                         </div>
                     </div>
                 </div>
@@ -2410,20 +2410,20 @@ def render_predictor_tab(ctx, model, scaler, metadata):
                 if show_vulnerability:
                     st.markdown("""
                     <div style="padding: 0 1rem;">
-                        <p style="font-weight: 700; color: #f1f5f9; font-size: 0.9rem; margin-bottom: 0.4rem;">\u26A0\uFE0F Population Vulnerability</p>
-                        <p style="font-size: 0.72rem; color: #94a3b8; line-height: 1.3; margin-bottom: 0.8rem;">Overlay population density to reveal true risk zones (high heat + high population)</p>
+                        <p style="font-weight: 700; color: var(--text-primary); font-size: 0.9rem; margin-bottom: 0.4rem;">⚠️ Population Vulnerability</p>
+                        <p style="font-size: 0.72rem; color: var(--text-secondary); line-height: 1.3; margin-bottom: 0.8rem;">Overlay population density to reveal true risk zones (high heat + high population)</p>
                         <div style="display: flex; flex-direction: column; gap: 0.3rem;">
                             <div style="display: flex; align-items: center; gap: 0.5rem;">
                                 <div style="width: 16px; height: 16px; border-radius: 4px; background: #ef4444;"></div>
-                                <span style="font-size: 0.75rem; color: #94a3b8;">Critical</span>
+                                <span style="font-size: 0.75rem; color: var(--text-secondary);">Critical</span>
                             </div>
                             <div style="display: flex; align-items: center; gap: 0.5rem;">
                                 <div style="width: 16px; height: 16px; border-radius: 4px; background: #a855f7;"></div>
-                                <span style="font-size: 0.75rem; color: #94a3b8;">High</span>
+                                <span style="font-size: 0.75rem; color: var(--text-secondary);">High</span>
                             </div>
                             <div style="display: flex; align-items: center; gap: 0.5rem;">
                                 <div style="width: 16px; height: 16px; border-radius: 4px; background: #312e81;"></div>
-                                <span style="font-size: 0.75rem; color: #94a3b8;">Low</span>
+                                <span style="font-size: 0.75rem; color: var(--text-secondary);">Low</span>
                             </div>
                         </div>
                     </div>
@@ -2438,7 +2438,7 @@ def render_predictor_tab(ctx, model, scaler, metadata):
             ]
             
             st.markdown('<div class="section-header">🎯 Top 3 Priority Intervention Zones (Optimized Cooling)</div>', unsafe_allow_html=True)
-            st.markdown('<p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 1rem;">Based on real-time spatial predictions, these exact locations exhibit the highest thermal accumulation and are prioritized for mitigation.</p>', unsafe_allow_html=True)
+            st.markdown('<p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">Based on real-time spatial predictions, these exact locations exhibit the highest thermal accumulation and are prioritized for mitigation.</p>', unsafe_allow_html=True)
             
             z_col1, z_col2, z_col3 = st.columns(3)
             for i, idx in enumerate(top3_indices):
@@ -2451,9 +2451,9 @@ def render_predictor_tab(ctx, model, scaler, metadata):
                     st.markdown(f"""
                     <div class="metric-card" style="border-top: 3.5px solid #FF9933; padding: 1.25rem 1rem;">
                         <div style="font-size: 1.1rem; font-weight: 800; color: #FF9933; margin-bottom: 0.4rem; letter-spacing: 0.5px;">Zone {i+1}</div>
-                        <div style="font-size: 1.0rem; font-weight: 600; color: #ffffff; margin-bottom: 0.3rem;">{lst_val:.1f}°C</div>
-                        <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1rem; font-family: monospace; font-weight: 500;">{lat_val:.4f}°N, {lon_val:.4f}°E</div>
-                        <div style="font-size: 0.9rem; color: #ffffff; font-weight: 400; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.8rem;">{interventions[i]}</div>
+                        <div style="font-size: 1.0rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.3rem;">{lst_val:.1f}°C</div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; font-family: monospace; font-weight: 500;">{lat_val:.4f}°N, {lon_val:.4f}°E</div>
+                        <div style="font-size: 0.9rem; color: var(--text-primary); font-weight: 400; line-height: 1.4; border-top: 1px solid var(--border-subtle); padding-top: 0.8rem;">{interventions[i]}</div>
                     </div>
                     """, unsafe_allow_html=True)
 
@@ -2759,7 +2759,7 @@ def render_simulator_tab(ctx, model, scaler, metadata, explainer, forest_satelli
         with right_col:
             st.markdown('<div class="section-header">\U0001F4CB Scenario Analysis</div>', unsafe_allow_html=True)
             loc_name = selected_city if not is_custom else "training data"
-            st.markdown(f'<p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 1rem;">Current inputs compared to {loc_name} statistics.</p>', unsafe_allow_html=True)
+            st.markdown(f'<p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">Current inputs compared to {loc_name} statistics.</p>', unsafe_allow_html=True)
 
             for col_name in base_feature_cols:
                 s = stats[col_name]
@@ -2773,7 +2773,7 @@ def render_simulator_tab(ctx, model, scaler, metadata, explainer, forest_satelli
                 elif val > s['q75']:
                     level, level_color = "Above Avg", "#138808"
                 else:
-                    level, level_color = "Average", "#ffffff"
+                    level, level_color = "Average", "var(--text-primary)"
 
                 desc = info.get('desc', '')
                 tooltip_attr = f'title="{desc}" style="cursor: help; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 0.7rem 1rem; margin-bottom: 0.5rem;"' if desc else 'style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 0.7rem 1rem; margin-bottom: 0.5rem;"'
@@ -2781,15 +2781,15 @@ def render_simulator_tab(ctx, model, scaler, metadata, explainer, forest_satelli
                 st.markdown(f"""
                 <div {tooltip_attr}>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-size: 0.82rem; font-weight: 600; color: #f1f5f9;">{info['icon']} {info['name']} <span style="font-size: 0.7rem; font-weight: 400; color: #94a3b8; margin-left: 3px;">({info['full']})</span></span>
+                        <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-primary);">{info['icon']} {info['name']} <span style="font-size: 0.7rem; font-weight: 400; color: var(--text-secondary); margin-left: 3px;">({info['full']})</span></span>
                         <span style="font-size: 0.75rem; color: {level_color}; font-weight: 600;">{level}</span>
                     </div>
-                    <div style="background: rgba(255,255,255,0.06); border-radius: 4px; height: 4px; margin-top: 0.4rem;">
-                        <div style="width: {pct_rank:.0f}%; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #FF9933 0%, #ffffff 50%, #138808 100%);"></div>
+                    <div style="background: var(--border-subtle); border-radius: 4px; height: 4px; margin-top: 0.4rem;">
+                        <div style="width: {pct_rank:.0f}%; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #FF9933 0%, #138808 100%);"></div>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-top: 0.2rem;">
                         <span style="font-size: 0.7rem; color: #64748b;">{s['min']:.3f}</span>
-                        <span style="font-size: 0.7rem; color: #94a3b8; font-weight: 500;">{val:.4f}</span>
+                        <span style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 500;">{val:.4f}</span>
                         <span style="font-size: 0.7rem; color: #64748b;">{s['max']:.3f}</span>
                     </div>
                 </div>
