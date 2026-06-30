@@ -71,7 +71,30 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-if 'theme' not in st.session_state:
+def get_query_theme():
+    try:
+        return st.query_params.get("theme", None)
+    except AttributeError:
+        try:
+            params = st.experimental_get_query_params()
+            return params.get("theme", [None])[0]
+        except Exception:
+            return None
+
+def set_query_theme(theme_val):
+    try:
+        st.query_params["theme"] = theme_val
+    except AttributeError:
+        try:
+            st.experimental_set_query_params(theme=theme_val)
+        except Exception:
+            pass
+
+# Initialize theme from query parameters if available, fallback to dark
+url_theme = get_query_theme()
+if url_theme in ['light', 'dark']:
+    st.session_state.theme = url_theme
+elif 'theme' not in st.session_state:
     st.session_state.theme = 'dark'
 
 # ── City Database ────────────────────────────────────────────────────────────
@@ -1757,7 +1780,9 @@ margin-bottom:16px;">
     with col_theme:
         theme_icon = "☀️" if st.session_state.theme == "dark" else "🌙"
         if st.button(theme_icon, key="theme_toggle", help="Toggle Light/Dark Theme"):
-            st.session_state.theme = "light" if st.session_state.theme == "dark" else "dark"
+            new_theme = "light" if st.session_state.theme == "dark" else "dark"
+            st.session_state.theme = new_theme
+            set_query_theme(new_theme)
             try:
                 st.rerun()
             except AttributeError:
