@@ -71,6 +71,9 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+if 'theme' not in st.session_state:
+    st.session_state.theme = 'dark'
+
 # ── City Database ────────────────────────────────────────────────────────────
 CITIES = {
     "Hyderabad": {
@@ -117,30 +120,65 @@ CITIES = {
 
 
 # ── Custom CSS ───────────────────────────────────────────────────────────────
-st.markdown("""
+if st.session_state.theme == 'light':
+    bg_primary = "#f9fafb"
+    bg_card = "rgba(255, 255, 255, 0.95)"
+    bg_card_hover = "rgba(243, 244, 246, 0.95)"
+    accent_orange = "#d97706"
+    accent_blue = "#2563eb"
+    accent_cyan = "#0891b2"
+    accent_green = "#059669"
+    accent_red = "#dc2626"
+    accent_purple = "#7c3aed"
+    text_primary = "#111827"
+    text_secondary = "#4b5563"
+    border_subtle = "rgba(0, 0, 0, 0.08)"
+    sidebar_bg = "linear-gradient(180deg, #f3f4f6 0%, #e5e7eb 100%)"
+    sidebar_border = "rgba(0, 0, 0, 0.08)"
+    bg_svg_stroke_orange = "rgba(217, 119, 6, 0.015)"
+    bg_svg_stroke_white = "rgba(0, 0, 0, 0.01)"
+else:
+    bg_primary = "#050508"
+    bg_card = "rgba(13, 13, 22, 0.7)"
+    bg_card_hover = "rgba(22, 22, 35, 0.85)"
+    accent_orange = "#f97316"
+    accent_blue = "#3b82f6"
+    accent_cyan = "#06b6d4"
+    accent_green = "#10b981"
+    accent_red = "#ef4444"
+    accent_purple = "#8b5cf6"
+    text_primary = "#f1f5f9"
+    text_secondary = "#94a3b8"
+    border_subtle = "rgba(255, 255, 255, 0.05)"
+    sidebar_bg = "linear-gradient(180deg, #07070b 0%, #10101b 100%)"
+    sidebar_border = "rgba(255, 255, 255, 0.04)"
+    bg_svg_stroke_orange = "rgba(249, 115, 22, 0.03)"
+    bg_svg_stroke_white = "rgba(255, 255, 255, 0.015)"
+
+st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
-:root {
-    --bg-primary: #050508;
-    --bg-card: rgba(13, 13, 22, 0.7);
-    --bg-card-hover: rgba(22, 22, 35, 0.85);
-    --accent-orange: #f97316;
-    --accent-blue: #3b82f6;
-    --accent-cyan: #06b6d4;
-    --accent-green: #10b981;
-    --accent-red: #ef4444;
-    --accent-purple: #8b5cf6;
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --border-subtle: rgba(255, 255, 255, 0.05);
-}
+:root {{
+    --bg-primary: {bg_primary};
+    --bg-card: {bg_card};
+    --bg-card-hover: {bg_card_hover};
+    --accent-orange: {accent_orange};
+    --accent-blue: {accent_blue};
+    --accent-cyan: {accent_cyan};
+    --accent-green: {accent_green};
+    --accent-red: {accent_red};
+    --accent-purple: {accent_purple};
+    --text-primary: {text_primary};
+    --text-secondary: {text_secondary};
+    --border-subtle: {border_subtle};
+}}
 
-html, body, [data-testid="stAppViewContainer"] {
+html, body, [data-testid="stAppViewContainer"] {{
     font-family: 'Outfit', sans-serif !important;
-    background-color: #050508 !important;
-    color: #f1f5f9 !important;
-}
+    background-color: {bg_primary} !important;
+    color: {text_primary} !important;
+}}
 
 /* Prevent icon font-family overrides that leak raw ligature text like keyboard_double */
 .material-icons,
@@ -160,34 +198,34 @@ button[aria-label*="Open"] *,
 button[aria-label*="Collapse"] *,
 [data-testid="stSidebarCollapseButton"] *,
 [data-testid="baseButton-header"] *,
-button[kind="headerNoPadding"] * {
+button[kind="headerNoPadding"] * {{
     font-family: "Material Icons", "Material Symbols Outlined", "Material Symbols Rounded", "Source Sans Pro", sans-serif !important;
-}
+}}
 
-[data-testid="stAppViewContainer"], .stApp {
-    background-color: #050508 !important;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2005/svg' width='1000' height='1000' viewBox='0 0 1000 1000'%3E%3Cpath d='M-100,200 C300,100 200,600 700,500 C1100,400 900,900 1200,800' fill='none' stroke='rgba(249, 115, 22, 0.03)' stroke-width='1.5'/%3E%3Cpath d='M-100,400 C400,200 300,800 800,600 C1200,500 1000,1100 1300,1000' fill='none' stroke='rgba(249, 115, 22, 0.025)' stroke-width='1'/%3E%3Cpath d='M-100,50 C200,-50 100,300 500,250 C800,200 700,600 1000,550' fill='none' stroke='rgba(255, 255, 255, 0.015)' stroke-width='1'/%3E%3Cpath d='M200,800 C400,700 300,1100 800,900 C1100,800 1000,1200 1200,1100' fill='none' stroke='rgba(249, 115, 22, 0.02)' stroke-width='1'/%3E%3C/svg%3E") !important;
+[data-testid="stAppViewContainer"], .stApp {{
+    background-color: {bg_primary} !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2005/svg' width='1000' height='1000' viewBox='0 0 1000 1000'%3E%3Cpath d='M-100,200 C300,100 200,600 700,500 C1100,400 900,900 1200,800' fill='none' stroke='{bg_svg_stroke_orange}' stroke-width='1.5'/%3E%3Cpath d='M-100,400 C400,200 300,800 800,600 C1200,500 1000,1100 1300,1000' fill='none' stroke='{bg_svg_stroke_orange}' stroke-width='1'/%3E%3Cpath d='M-100,50 C200,-50 100,300 500,250 C800,200 700,600 1000,550' fill='none' stroke='{bg_svg_stroke_white}' stroke-width='1'/%3E%3Cpath d='M200,800 C400,700 300,1100 800,900 C1100,800 1000,1200 1200,1100' fill='none' stroke='{bg_svg_stroke_orange}' stroke-width='1'/%3E%3C/svg%3E") !important;
     background-size: cover !important;
     background-attachment: fixed !important;
-}
+}}
 
-.main .block-container {
+.main .block-container {{
     padding-top: 1rem;
     max-width: 1300px;
-}
+}}
 
-section[data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #07070b 0%, #10101b 100%) !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.04) !important;
-}
+section[data-testid="stSidebar"] {{
+    background: {sidebar_bg} !important;
+    border-right: 1px solid {sidebar_border} !important;
+}}
 section[data-testid="stSidebar"] .stSlider label,
 section[data-testid="stSidebar"] p,
-section[data-testid="stSidebar"] span:not(button *):not([data-testid*="Collapse"] *):not([data-testid*="Sidebar"] *):not([class*="Icon"]):not([class*="icon"]):not(.material-icons) {
+section[data-testid="stSidebar"] span:not(button *):not([data-testid*="Collapse"] *):not([data-testid*="Sidebar"] *):not([class*="Icon"]):not([class*="icon"]):not(.material-icons) {{
     color: var(--text-secondary) !important;
     font-family: 'Outfit', sans-serif !important;
-}
+}}
 
-/* Make headings and parameter names bold and bright white in the sidebar */
+/* Make headings and parameter names bold in the sidebar */
 section[data-testid="stSidebar"] h1,
 section[data-testid="stSidebar"] h2,
 section[data-testid="stSidebar"] h3,
@@ -200,10 +238,10 @@ section[data-testid="stSidebar"] h3 *,
 section[data-testid="stSidebar"] strong,
 section[data-testid="stSidebar"] strong *,
 section[data-testid="stSidebar"] b,
-section[data-testid="stSidebar"] b * {
+section[data-testid="stSidebar"] b * {{
     font-weight: 800 !important;
-    color: #f1f5f9 !important;
-}
+    color: var(--text-primary) !important;
+}}
 
 /* Explicit override for collapse button inside the sidebar to override the sidebar span font family */
 section[data-testid="stSidebar"] button *,
@@ -421,15 +459,15 @@ button[data-testid="stTab"] {
     border-bottom: 2px solid transparent !important;
 }
 button[data-testid="stTab"]:hover {
-    color: #ffffff !important;
+    color: var(--text-primary) !important;
 }
 button[data-testid="stTab"][aria-selected="true"] {
-    color: #ffffff !important;
-    border-bottom: 2px solid #f97316 !important;
+    color: var(--text-primary) !important;
+    border-bottom: 2px solid var(--accent-orange) !important;
 }
 div[data-testid="stTabBar"] {
     background-color: transparent !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
     justify-content: center !important;
     margin-bottom: 2rem !important;
 }
@@ -563,13 +601,13 @@ div[data-testid="stTabBar"] {
     font-family: 'Syne', sans-serif;
     font-size: 1.2rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-primary);
     margin-bottom: 0.25rem;
 }
 .card-desc {
     font-family: 'Outfit', sans-serif;
     font-size: 0.82rem;
-    color: #cbd5e1;
+    color: var(--text-secondary);
     line-height: 1.35;
 }
 
@@ -578,19 +616,19 @@ div[data-testid="stTabBar"] {
     font-family: 'Syne', sans-serif !important;
     font-size: 1.8rem !important;
     font-weight: 800 !important;
-    color: #ffffff;
+    color: var(--text-primary);
     margin-bottom: 0.8rem;
 }
 .about-text {
     font-family: 'Outfit', sans-serif;
-    color: #cbd5e1;
+    color: var(--text-secondary);
     font-size: 0.92rem;
     line-height: 1.6;
     margin-bottom: 1.2rem;
 }
 .founder-card {
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-subtle);
     background-size: cover;
     background-position: center;
     padding: 1.2rem;
@@ -606,7 +644,7 @@ div[data-testid="stTabBar"] {
 .founder-name {
     font-family: 'Syne', sans-serif;
     font-size: 1.05rem;
-    color: #ffffff;
+    color: var(--text-primary);
     font-weight: 700;
 }
 .founder-title {
@@ -616,7 +654,7 @@ div[data-testid="stTabBar"] {
 }
 .live-card {
     border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-subtle);
     background-size: cover;
     background-position: center;
     height: 220px;
@@ -672,7 +710,7 @@ div[data-testid="stTabBar"] {
 }
 .live-title {
     font-family: 'Syne', sans-serif;
-    color: #ffffff;
+    color: var(--text-primary);
     font-size: 1.15rem;
     font-weight: 700;
     margin-bottom: 0.2rem;
@@ -811,6 +849,29 @@ div[data-testid="stTabBar"] {
     [data-testid="column"] {
         min-width: 100% !important;
     }
+}
+
+/* Custom Theme Toggle Button Style */
+button[key="theme_toggle"] {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-subtle) !important;
+    color: var(--text-primary) !important;
+    border-radius: 50% !important;
+    width: 42px !important;
+    height: 42px !important;
+    font-size: 1.25rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    cursor: pointer !important;
+    margin-left: auto !important;
+    margin-top: 5px !important;
+    transition: all 0.3s ease !important;
+}
+button[key="theme_toggle"]:hover {
+    transform: scale(1.1) !important;
+    border-color: var(--accent-orange) !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -1635,36 +1696,46 @@ def main():
     # ── Hackathon Branding (Top Left Corner) ─────────────────────────────────
     st.markdown(f"""
 <div style="display:flex; align-items:center; gap:16px; 
-padding:8px 0 16px 0; border-bottom:1px solid rgba(255,255,255,0.08); 
+padding:8px 0 16px 0; border-bottom:1px solid var(--border-subtle); 
 margin-bottom:16px;">
     <img src="data:image/png;base64,{isro_logo_b64}" 
          height="48" style="object-fit:contain;"/>
-    <div style="width:1px;height:38px;background:rgba(255,255,255,0.15);"></div>
-    <span style="font-family: 'Outfit', sans-serif; color:#cbd5e1; line-height:1.4;">
+    <div style="width:1px;height:38px;background:var(--border-subtle);"></div>
+    <span style="font-family: 'Outfit', sans-serif; color:var(--text-secondary); line-height:1.4;">
         <strong style="color:#FF9933; font-size:1.15rem; font-weight:800; display:block; margin-bottom:2px; letter-spacing:0.5px;">Bharatiya Antariksh Hackathon 2026</strong>
-        <span style="font-size:13px; color:#94a3b8; font-weight:500;">Problem Statement — Urban Heat Mitigation via AI/ML</span>
+        <span style="font-size:13px; color:var(--text-secondary); font-weight:500;">Problem Statement — Urban Heat Mitigation via AI/ML</span>
     </span>
 </div>
 """, unsafe_allow_html=True)
 
-    # ── Custom Header ────────────────────────────────────────────────────────
-    st.markdown(f"""
-    <div class="spacenas-header">
-        <div class="navbar-logo">
-            <span class="logo-icon">🛰️</span>
-            <span class="logo-text"><span style="color: #FF9933;">Urban Heat</span> <span style="color: #FFFFFF;">Island</span> <span style="color: #128807;">Predictor</span></span>
+    # ── Custom Header with Theme Toggle ──────────────────────────────────────
+    col_logo, col_theme = st.columns([10, 1])
+    with col_logo:
+        st.markdown(f"""
+        <div class="spacenas-header" style="border: none; padding: 0.5rem 0; margin-bottom: 0;">
+            <div class="navbar-logo">
+                <span class="logo-icon">🛰️</span>
+                <span class="logo-text"><span style="color: #FF9933;">Urban Heat</span> <span style="color: var(--text-primary);">Island</span> <span style="color: #128807;">Predictor</span></span>
+            </div>
         </div>
-    </div>
-    """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
+    with col_theme:
+        theme_icon = "☀️" if st.session_state.theme == "dark" else "🌙"
+        if st.button(theme_icon, key="theme_toggle", help="Toggle Light/Dark Theme"):
+            st.session_state.theme = "light" if st.session_state.theme == "dark" else "dark"
+            try:
+                st.rerun()
+            except AttributeError:
+                st.experimental_rerun()
 
     # ── Spacenas-Style Hero Header ───────────────────────────────────────
     st.markdown(f"""
-    <div class="spacenas-hero">
-        <h1 class="hero-title">
+    <div class="spacenas-hero" style="padding-top: 1.5rem;">
+        <h1 class="hero-title" style="color: var(--text-primary);">
             Discover <span class="capsule-img" style="background-image: url(data:image/png;base64,{thermal_earth_b64});">heat signatures</span> from space<br>
             beyond <span class="orange-highlight">visible light</span>
         </h1>
-        <p class="hero-subtitle" style="text-align: center !important; margin: 1.2rem auto 0 auto; max-width: 650px;">Simulate urban microclimates and predict surface temperatures using satellite observations & physics-informed AI</p>
+        <p class="hero-subtitle" style="text-align: center !important; margin: 1.2rem auto 0 auto; max-width: 650px; color: var(--text-secondary);">Simulate urban microclimates and predict surface temperatures using satellite observations & physics-informed AI</p>
     </div>
     """, unsafe_allow_html=True)
 
