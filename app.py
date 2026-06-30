@@ -843,6 +843,67 @@ div[data-testid="stTabBar"] {
     font-weight: 500 !important;
 }
 
+/* Style all Streamlit native selectbox/dropdowns dynamically */
+div[data-baseweb="select"] > div {
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-subtle) !important;
+}
+div[data-baseweb="select"] span {
+    color: var(--text-primary) !important;
+}
+div[data-baseweb="popover"] ul {
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-subtle) !important;
+}
+div[data-baseweb="popover"] li {
+    color: var(--text-primary) !important;
+    background-color: var(--bg-card) !important;
+}
+div[data-baseweb="popover"] li:hover {
+    background-color: var(--bg-card-hover) !important;
+    color: var(--accent-orange) !important;
+}
+
+/* Style all Streamlit native sliders dynamically */
+div[data-testid="stSlider"] [data-direction="horizontal"] {
+    background-color: var(--border-subtle) !important;
+}
+div[role="slider"] {
+    background-color: var(--accent-orange) !important;
+    border: 2px solid var(--bg-primary) !important;
+}
+div[data-testid="stSlider"] div {
+    color: var(--text-secondary) !important;
+}
+
+/* Style all Streamlit multiselect tags dynamically */
+div[data-baseweb="tag"] {
+    background-color: var(--border-subtle) !important;
+    color: var(--text-primary) !important;
+    border-radius: 6px !important;
+}
+div[data-baseweb="tag"] span {
+    color: var(--text-primary) !important;
+}
+
+/* Style all Streamlit expanders dynamically */
+details {
+    border: 1px solid var(--border-subtle) !important;
+    background-color: var(--bg-card) !important;
+    border-radius: 12px !important;
+    margin-bottom: 1rem !important;
+}
+details summary {
+    color: var(--text-primary) !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 600 !important;
+}
+details summary:hover {
+    color: var(--accent-orange) !important;
+}
+
 /* Style all Streamlit buttons dynamically */
 div.stButton > button {
     background-color: var(--bg-card) !important;
