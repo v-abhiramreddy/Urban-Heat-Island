@@ -148,7 +148,7 @@ st.markdown("""
 }
 
 /* Light Theme Variables */
-[data-theme="light"], .light-theme {
+[data-theme="light"], [data-theme="light"] *, .light-theme, .light-theme * {
     --bg-primary: #f9fafb;
     --bg-card: rgba(255, 255, 255, 0.95);
     --bg-card-hover: rgba(243, 244, 246, 0.95);
@@ -170,7 +170,7 @@ st.markdown("""
 }
 
 /* Dark Theme Variables */
-[data-theme="dark"], .dark-theme {
+[data-theme="dark"], [data-theme="dark"] *, .dark-theme, .dark-theme * {
     --bg-primary: #050508;
     --bg-card: rgba(13, 13, 22, 0.7);
     --bg-card-hover: rgba(22, 22, 35, 0.85);
@@ -199,7 +199,7 @@ st.markdown("""
     --primaryColor: var(--accent-orange) !important;
 }
 
-html, body, [data-testid="stAppViewContainer"] {
+html, body, [data-testid="stAppViewContainer"], .stApp {
     font-family: 'Outfit', sans-serif !important;
     background-color: var(--bg-primary) !important;
     color: var(--text-primary) !important;
@@ -218,14 +218,24 @@ html, body, [data-testid="stAppViewContainer"] {
 
 /* Light SVG */
 [data-theme="light"] [data-testid="stAppViewContainer"],
-[data-theme="light"] .stApp {
+.stApp[data-theme="light"] {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2005/svg' width='1000' height='1000' viewBox='0 0 1000 1000'%3E%3Cpath d='M-100,200 C300,100 200,600 700,500 C1100,400 900,900 1200,800' fill='none' stroke='rgba(217, 119, 6, 0.015)' stroke-width='1.5'/%3E%3Cpath d='M-100,400 C400,200 300,800 800,600 C1200,500 1000,1100 1300,1000' fill='none' stroke='rgba(217, 119, 6, 0.015)' stroke-width='1'/%3E%3Cpath d='M-100,50 C200,-50 100,300 500,250 C800,200 700,600 1000,550' fill='none' stroke='rgba(0, 0, 0, 0.01)' stroke-width='1'/%3E%3Cpath d='M200,800 C400,700 300,1100 800,900 C1100,800 1000,1200 1200,1100' fill='none' stroke='rgba(217, 119, 6, 0.015)' stroke-width='1'/%3E%3C/svg%3E") !important;
 }
 
 /* Dark SVG (explicit) */
 [data-theme="dark"] [data-testid="stAppViewContainer"],
-[data-theme="dark"] .stApp {
+.stApp[data-theme="dark"] {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2005/svg' width='1000' height='1000' viewBox='0 0 1000 1000'%3E%3Cpath d='M-100,200 C300,100 200,600 700,500 C1100,400 900,900 1200,800' fill='none' stroke='rgba(249, 115, 22, 0.03)' stroke-width='1.5'/%3E%3Cpath d='M-100,400 C400,200 300,800 800,600 C1200,500 1000,1100 1300,1000' fill='none' stroke='rgba(249, 115, 22, 0.03)' stroke-width='1'/%3E%3Cpath d='M-100,50 C200,-50 100,300 500,250 C800,200 700,600 1000,550' fill='none' stroke='rgba(255, 255, 255, 0.015)' stroke-width='1'/%3E%3Cpath d='M200,800 C400,700 300,1100 800,900 C1100,800 1000,1200 1200,1100' fill='none' stroke='rgba(249, 115, 22, 0.03)' stroke-width='1'/%3E%3C/svg%3E") !important;
+}
+
+/* Sidebar theme specific overrides */
+.stApp[data-theme="light"] section[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #f3f4f6 0%, #e5e7eb 100%) !important;
+    border-right: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+.stApp[data-theme="dark"] section[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #07070b 0%, #10101b 100%) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.04) !important;
 }
 
 section[data-testid="stSidebar"] {
