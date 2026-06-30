@@ -812,11 +812,12 @@ div[data-testid="stTabBar"] {
 .footer {
     text-align: center !important;
     padding: 1.5rem 0 0.8rem 0 !important;
-    font-size: 0.72rem !important;
+    font-size: 0.75rem !important;
     border-top: 1px solid var(--border-subtle) !important;
     margin-top: 2.5rem !important;
-    color: var(--text-secondary) !important;
-    opacity: 0.6 !important;
+    color: var(--text-primary) !important;
+    opacity: 0.85 !important;
+    font-weight: 500 !important;
 }
 
 /* Style all Streamlit buttons dynamically */
@@ -2785,7 +2786,7 @@ def render_simulator_tab(ctx, model, scaler, metadata, explainer, forest_satelli
                         <span style="font-size: 0.75rem; color: {level_color}; font-weight: 600;">{level}</span>
                     </div>
                     <div style="background: var(--border-subtle); border-radius: 4px; height: 4px; margin-top: 0.4rem;">
-                        <div style="width: {pct_rank:.0f}%; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #FF9933 0%, #138808 100%);"></div>
+                        <div style="width: {pct_rank:.0f}%; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #FF9933 0%, #ffffff 50%, #138808 100%);"></div>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-top: 0.2rem;">
                         <span style="font-size: 0.7rem; color: #64748b;">{s['min']:.3f}</span>
