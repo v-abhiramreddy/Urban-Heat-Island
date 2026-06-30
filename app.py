@@ -71,30 +71,8 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-def get_query_theme():
-    try:
-        return st.query_params.get("theme", None)
-    except AttributeError:
-        try:
-            params = st.experimental_get_query_params()
-            return params.get("theme", [None])[0]
-        except Exception:
-            return None
-
-def set_query_theme(theme_val):
-    try:
-        st.query_params["theme"] = theme_val
-    except AttributeError:
-        try:
-            st.experimental_set_query_params(theme=theme_val)
-        except Exception:
-            pass
-
-# Initialize theme from query parameters if available, fallback to dark
-url_theme = get_query_theme()
-if url_theme in ['light', 'dark']:
-    st.session_state.theme = url_theme
-elif 'theme' not in st.session_state:
+# Theme state check (fallback, not used directly in stylesheet now)
+if 'theme' not in st.session_state:
     st.session_state.theme = 'dark'
 
 # ── City Database ────────────────────────────────────────────────────────────
@@ -143,97 +121,117 @@ CITIES = {
 
 
 # ── Custom CSS ───────────────────────────────────────────────────────────────
-if st.session_state.theme == 'light':
-    bg_primary = "#f9fafb"
-    bg_card = "rgba(255, 255, 255, 0.95)"
-    bg_card_hover = "rgba(243, 244, 246, 0.95)"
-    accent_orange = "#d97706"
-    accent_blue = "#2563eb"
-    accent_cyan = "#0891b2"
-    accent_green = "#059669"
-    accent_red = "#dc2626"
-    accent_purple = "#7c3aed"
-    text_primary = "#111827"
-    text_secondary = "#4b5563"
-    border_subtle = "rgba(0, 0, 0, 0.08)"
-    sidebar_bg = "linear-gradient(180deg, #f3f4f6 0%, #e5e7eb 100%)"
-    sidebar_border = "rgba(0, 0, 0, 0.08)"
-    bg_svg_stroke_orange = "rgba(217, 119, 6, 0.015)"
-    bg_svg_stroke_white = "rgba(0, 0, 0, 0.01)"
-    card_overlay = "linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.6) 100%)"
-    card_overlay_hover = "linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.7) 100%)"
-    card_stroke = "rgba(0, 0, 0, 0.15)"
-    founder_overlay = "linear-gradient(90deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.72) 100%)"
-else:
-    bg_primary = "#050508"
-    bg_card = "rgba(13, 13, 22, 0.7)"
-    bg_card_hover = "rgba(22, 22, 35, 0.85)"
-    accent_orange = "#f97316"
-    accent_blue = "#3b82f6"
-    accent_cyan = "#06b6d4"
-    accent_green = "#10b981"
-    accent_red = "#ef4444"
-    accent_purple = "#8b5cf6"
-    text_primary = "#f1f5f9"
-    text_secondary = "#94a3b8"
-    border_subtle = "rgba(255, 255, 255, 0.05)"
-    sidebar_bg = "linear-gradient(180deg, #07070b 0%, #10101b 100%)"
-    sidebar_border = "rgba(255, 255, 255, 0.04)"
-    bg_svg_stroke_orange = "rgba(249, 115, 22, 0.03)"
-    bg_svg_stroke_white = "rgba(255, 255, 255, 0.015)"
-    card_overlay = "linear-gradient(180deg, rgba(5,5,8,0.2) 0%, rgba(5,5,8,0.9) 100%)"
-    card_overlay_hover = "linear-gradient(180deg, rgba(5,5,8,0) 0%, rgba(5,5,8,0.95) 100%)"
-    card_stroke = "rgba(255,255,255,0.35)"
-    founder_overlay = "linear-gradient(90deg, rgba(5,5,8,0.7) 0%, rgba(5,5,8,0.95) 100%)"
-
-st.markdown(f"""
+st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
-:root {{
-    --bg-primary: {bg_primary};
-    --bg-card: {bg_card};
-    --bg-card-hover: {bg_card_hover};
-    --accent-orange: {accent_orange};
-    --accent-blue: {accent_blue};
-    --accent-cyan: {accent_cyan};
-    --accent-green: {accent_green};
-    --accent-red: {accent_red};
-    --accent-purple: {accent_purple};
-    --text-primary: {text_primary};
-    --text-secondary: {text_secondary};
-    --border-subtle: {border_subtle};
-    --card-overlay: {card_overlay};
-    --card-overlay-hover: {card_overlay_hover};
-    --card-stroke: {card_stroke};
-    --founder-overlay: {founder_overlay};
-}}
+/* Default (Dark) Theme Variables */
+:root {
+    --bg-primary: #050508;
+    --bg-card: rgba(13, 13, 22, 0.7);
+    --bg-card-hover: rgba(22, 22, 35, 0.85);
+    --accent-orange: #f97316;
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-green: #10b981;
+    --accent-red: #ef4444;
+    --accent-purple: #8b5cf6;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    --sidebar-bg: linear-gradient(180deg, #07070b 0%, #10101b 100%);
+    --sidebar-border: rgba(255, 255, 255, 0.04);
+    --card-overlay: linear-gradient(180deg, rgba(5,5,8,0.2) 0%, rgba(5,5,8,0.9) 100%);
+    --card-overlay-hover: linear-gradient(180deg, rgba(5,5,8,0) 0%, rgba(5,5,8,0.95) 100%);
+    --card-stroke: rgba(255,255,255,0.35);
+    --founder-overlay: linear-gradient(90deg, rgba(5,5,8,0.7) 0%, rgba(5,5,8,0.95) 100%);
+}
+
+/* Light Theme Variables */
+[data-theme="light"], .light-theme {
+    --bg-primary: #f9fafb;
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --bg-card-hover: rgba(243, 244, 246, 0.95);
+    --accent-orange: #d97706;
+    --accent-blue: #2563eb;
+    --accent-cyan: #0891b2;
+    --accent-green: #059669;
+    --accent-red: #dc2626;
+    --accent-purple: #7c3aed;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --border-subtle: rgba(0, 0, 0, 0.08);
+    --sidebar-bg: linear-gradient(180deg, #f3f4f6 0%, #e5e7eb 100%);
+    --sidebar-border: rgba(0, 0, 0, 0.08);
+    --card-overlay: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.6) 100%);
+    --card-overlay-hover: linear-gradient(180deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.7) 100%);
+    --card-stroke: rgba(0, 0, 0, 0.15);
+    --founder-overlay: linear-gradient(90deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.72) 100%);
+}
+
+/* Dark Theme Variables */
+[data-theme="dark"], .dark-theme {
+    --bg-primary: #050508;
+    --bg-card: rgba(13, 13, 22, 0.7);
+    --bg-card-hover: rgba(22, 22, 35, 0.85);
+    --accent-orange: #f97316;
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-green: #10b981;
+    --accent-red: #ef4444;
+    --accent-purple: #8b5cf6;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    --sidebar-bg: linear-gradient(180deg, #07070b 0%, #10101b 100%);
+    --sidebar-border: rgba(255, 255, 255, 0.04);
+    --card-overlay: linear-gradient(180deg, rgba(5,5,8,0.2) 0%, rgba(5,5,8,0.9) 100%);
+    --card-overlay-hover: linear-gradient(180deg, rgba(5,5,8,0) 0%, rgba(5,5,8,0.95) 100%);
+    --card-stroke: rgba(255,255,255,0.35);
+    --founder-overlay: linear-gradient(90deg, rgba(5,5,8,0.7) 0%, rgba(5,5,8,0.95) 100%);
+}
 
 /* Force Streamlit native widgets (selectbox, slider, sidebar, etc.) to use our variables */
-:root, [data-theme="light"], [data-theme="dark"], [data-testid="stAppViewContainer"], [data-testid="stHeader"] {{
-    --backgroundColor: {bg_primary} !important;
-    --textColor: {text_primary} !important;
-    --secondaryBackgroundColor: {bg_card} !important;
-    --primaryColor: {accent_orange} !important;
-}}
+:root, [data-theme="light"], [data-theme="dark"], [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
+    --backgroundColor: var(--bg-primary) !important;
+    --textColor: var(--text-primary) !important;
+    --secondaryBackgroundColor: var(--bg-card) !important;
+    --primaryColor: var(--accent-orange) !important;
+}
 
-html, body, [data-testid="stAppViewContainer"] {{
+html, body, [data-testid="stAppViewContainer"] {
     font-family: 'Outfit', sans-serif !important;
-    background-color: {bg_primary} !important;
-    color: {text_primary} !important;
-}}
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
 
-[data-testid="stAppViewContainer"], .stApp {{
-    background-color: {bg_primary} !important;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2005/svg' width='1000' height='1000' viewBox='0 0 1000 1000'%3E%3Cpath d='M-100,200 C300,100 200,600 700,500 C1100,400 900,900 1200,800' fill='none' stroke='{bg_svg_stroke_orange}' stroke-width='1.5'/%3E%3Cpath d='M-100,400 C400,200 300,800 800,600 C1200,500 1000,1100 1300,1000' fill='none' stroke='{bg_svg_stroke_orange}' stroke-width='1'/%3E%3Cpath d='M-100,50 C200,-50 100,300 500,250 C800,200 700,600 1000,550' fill='none' stroke='{bg_svg_stroke_white}' stroke-width='1'/%3E%3Cpath d='M200,800 C400,700 300,1100 800,900 C1100,800 1000,1200 1200,1100' fill='none' stroke='{bg_svg_stroke_orange}' stroke-width='1'/%3E%3C/svg%3E") !important;
+[data-testid="stAppViewContainer"], .stApp {
+    background-color: var(--bg-primary) !important;
     background-size: cover !important;
     background-attachment: fixed !important;
-}}
+}
 
-section[data-testid="stSidebar"] {{
-    background: {sidebar_bg} !important;
-    border-right: 1px solid {sidebar_border} !important;
-}}
+/* Default SVG (Dark) */
+[data-testid="stAppViewContainer"], .stApp {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2005/svg' width='1000' height='1000' viewBox='0 0 1000 1000'%3E%3Cpath d='M-100,200 C300,100 200,600 700,500 C1100,400 900,900 1200,800' fill='none' stroke='rgba(249, 115, 22, 0.03)' stroke-width='1.5'/%3E%3Cpath d='M-100,400 C400,200 300,800 800,600 C1200,500 1000,1100 1300,1000' fill='none' stroke='rgba(249, 115, 22, 0.03)' stroke-width='1'/%3E%3Cpath d='M-100,50 C200,-50 100,300 500,250 C800,200 700,600 1000,550' fill='none' stroke='rgba(255, 255, 255, 0.015)' stroke-width='1'/%3E%3Cpath d='M200,800 C400,700 300,1100 800,900 C1100,800 1000,1200 1200,1100' fill='none' stroke='rgba(249, 115, 22, 0.03)' stroke-width='1'/%3E%3C/svg%3E") !important;
+}
+
+/* Light SVG */
+[data-theme="light"] [data-testid="stAppViewContainer"],
+[data-theme="light"] .stApp {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2005/svg' width='1000' height='1000' viewBox='0 0 1000 1000'%3E%3Cpath d='M-100,200 C300,100 200,600 700,500 C1100,400 900,900 1200,800' fill='none' stroke='rgba(217, 119, 6, 0.015)' stroke-width='1.5'/%3E%3Cpath d='M-100,400 C400,200 300,800 800,600 C1200,500 1000,1100 1300,1000' fill='none' stroke='rgba(217, 119, 6, 0.015)' stroke-width='1'/%3E%3Cpath d='M-100,50 C200,-50 100,300 500,250 C800,200 700,600 1000,550' fill='none' stroke='rgba(0, 0, 0, 0.01)' stroke-width='1'/%3E%3Cpath d='M200,800 C400,700 300,1100 800,900 C1100,800 1000,1200 1200,1100' fill='none' stroke='rgba(217, 119, 6, 0.015)' stroke-width='1'/%3E%3C/svg%3E") !important;
+}
+
+/* Dark SVG (explicit) */
+[data-theme="dark"] [data-testid="stAppViewContainer"],
+[data-theme="dark"] .stApp {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2005/svg' width='1000' height='1000' viewBox='0 0 1000 1000'%3E%3Cpath d='M-100,200 C300,100 200,600 700,500 C1100,400 900,900 1200,800' fill='none' stroke='rgba(249, 115, 22, 0.03)' stroke-width='1.5'/%3E%3Cpath d='M-100,400 C400,200 300,800 800,600 C1200,500 1000,1100 1300,1000' fill='none' stroke='rgba(249, 115, 22, 0.03)' stroke-width='1'/%3E%3Cpath d='M-100,50 C200,-50 100,300 500,250 C800,200 700,600 1000,550' fill='none' stroke='rgba(255, 255, 255, 0.015)' stroke-width='1'/%3E%3Cpath d='M200,800 C400,700 300,1100 800,900 C1100,800 1000,1200 1200,1100' fill='none' stroke='rgba(249, 115, 22, 0.03)' stroke-width='1'/%3E%3C/svg%3E") !important;
+}
+
+section[data-testid="stSidebar"] {
+    background: var(--sidebar-bg) !important;
+    border-right: 1px solid var(--sidebar-border) !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -1835,27 +1833,15 @@ margin-bottom:16px;">
 </div>
 """, unsafe_allow_html=True)
 
-    # ── Custom Header with Theme Toggle ──────────────────────────────────────
-    col_logo, col_theme = st.columns([10, 1])
-    with col_logo:
-        st.markdown(f"""
-        <div class="spacenas-header" style="border: none; padding: 0.5rem 0; margin-bottom: 0;">
-            <div class="navbar-logo">
-                <span class="logo-icon">🛰️</span>
-                <span class="logo-text"><span style="color: #FF9933;">Urban Heat</span> <span style="color: var(--text-primary);">Island</span> <span style="color: #128807;">Predictor</span></span>
-            </div>
+    # ── Custom Header ──────────────────────────────────────
+    st.markdown(f"""
+    <div class="spacenas-header" style="border: none; padding: 0.5rem 0; margin-bottom: 0;">
+        <div class="navbar-logo">
+            <span class="logo-icon">🛰️</span>
+            <span class="logo-text"><span style="color: #FF9933;">Urban Heat</span> <span style="color: var(--text-primary);">Island</span> <span style="color: #128807;">Predictor</span></span>
         </div>
-        """, unsafe_allow_html=True)
-    with col_theme:
-        theme_icon = "☀️" if st.session_state.theme == "dark" else "🌙"
-        if st.button(theme_icon, key="theme_toggle", help="Toggle Light/Dark Theme"):
-            new_theme = "light" if st.session_state.theme == "dark" else "dark"
-            st.session_state.theme = new_theme
-            set_query_theme(new_theme)
-            try:
-                st.rerun()
-            except AttributeError:
-                st.experimental_rerun()
+    </div>
+    """, unsafe_allow_html=True)
 
     # ── Spacenas-Style Hero Header ───────────────────────────────────────
     st.markdown(f"""
@@ -3063,23 +3049,15 @@ def render_trends_tab():
                     showlegend=True
                 ))
                 
-        # Configure Plotly colors dynamically based on theme setting
-        if st.session_state.theme == 'light':
-            plotly_template = 'plotly'
-            plotly_bg = '#f9fafb'
-            plotly_text = '#111827'
-            plotly_grid = 'rgba(0,0,0,0.08)'
-        else:
-            plotly_template = 'plotly_dark'
-            plotly_bg = '#050508'
-            plotly_text = '#f1f5f9'
-            plotly_grid = 'rgba(255,255,255,0.08)'
+        # Neutral Plotly colors that look premium in both Light and Dark modes
+        plotly_text = '#7c7c7c'
+        plotly_grid = 'rgba(128,128,128,0.12)'
 
         fig_lst.update_layout(
             title='Land Surface Temperature (LST) Trend',
-            xaxis_title='Year', yaxis_title='Mean LST (°C)', template=plotly_template,
+            xaxis_title='Year', yaxis_title='Mean LST (°C)', template='plotly',
             height=400, legend=dict(orientation='h', y=-0.2, x=0),
-            paper_bgcolor=plotly_bg, plot_bgcolor=plotly_bg,
+            paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
             font=dict(color=plotly_text),
             margin=dict(l=40, r=40, t=50, b=50)
         )
@@ -3108,9 +3086,9 @@ def render_trends_tab():
             
         fig_ndvi.update_layout(
             title='Vegetation Index (NDVI) Greening Trend',
-            xaxis_title='Year', yaxis_title='Mean NDVI', template=plotly_template,
+            xaxis_title='Year', yaxis_title='Mean NDVI', template='plotly',
             height=400, legend=dict(orientation='h', y=-0.2, x=0),
-            paper_bgcolor=plotly_bg, plot_bgcolor=plotly_bg,
+            paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
             font=dict(color=plotly_text),
             margin=dict(l=40, r=40, t=50, b=50)
         )
