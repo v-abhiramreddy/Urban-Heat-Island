@@ -97,8 +97,8 @@ Compares Hyderabad, Delhi, Mumbai, and Chennai side-by-side:
 
 ## Recommended Judge Demo Flow
 1. **Onboarding**: Start at the **How to Use** tab to show the structural setup guide.
-2. **Geospatial Hotspots**: Go to **Simulation Dashboard** and select **Hyderabad** -> Point out the ** Folium Heatmap** and the **🎯 Top 3 Priority Intervention Zones** dynamically extracted below the map.
-3. **Run Interventions**: Click **"Simulate Urban Forest"** -> Watch LST metrics decrease and review the **🌱 Quantified Savings** card showing MWh energy saved and carbon offset.
+2. **Geospatial Hotspots**: Go to **Simulation Dashboard** and select **Hyderabad** -> Point out the **Folium Heatmap** and the **Top 3 Priority Intervention Zones** dynamically extracted below the map.
+3. **Run Interventions**: Click **"Simulate Urban Forest"** -> Watch LST metrics decrease and review the **Quantified Savings** card showing MWh energy saved and carbon offset.
 4. **Inspect Causality**: Switch to **Temporal Trends** -> Point out the LST↓ vs. NDVI↑ charts showing a negative correlation ($r \approx -0.98$) from historical satellite data.
 5. **Offline Handout**: Click **"Download Full Analysis Report (.txt)"** to save the diagnostics summary locally.
 
