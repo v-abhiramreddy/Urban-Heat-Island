@@ -81,7 +81,7 @@ This is the core workspace containing:
   -  *Restore Water Body* (NDWI +0.12, NDBI -0.03)
 - **Quantified Savings Card**: Computes daily cooling energy savings (MWh/day), avoided carbon emissions (tCO₂/yr), and financial cost savings (Lakhs/yr) across a 10 km² zone using EPA and Indian power tariff models.
 - **SHAP Feature Attribution**: Interactive bar chart displaying feature contributions pushing temperatures up (saffron/warming) or down (cyan/cooling).
-- **📄 Downloadable Analysis Report**: Generates and downloads a complete plain-text diagnostics report with model parameters, SHAP rankings, and action items.
+- **Downloadable Analysis Report**: Generates and downloads a complete plain-text diagnostics report with model parameters, SHAP rankings, and action items.
 
 ### 2. City Comparison Tab
 Compares Hyderabad, Delhi, Mumbai, and Chennai side-by-side:
@@ -169,6 +169,6 @@ Make sure the following files are in the root directory:
 
 ---
 
-## 👨‍💻 Submission Info
+## Submission Info
 - **Team**: Antariksh Vision
 - **Hackathon**: Bharatiya Antariksh Hackathon 2026 — ISRO × Hack2Skill
