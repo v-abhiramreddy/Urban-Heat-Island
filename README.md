@@ -1,4 +1,4 @@
-# 🌡️ Urban Heat Island Predictor
+#Urban Heat Island Predictor
 ### ISRO × Hack2Skill 2026 — Problem Statement: Optimizing Urban Heat Mitigation via AI/ML
 
 A geospatial AI/ML system that identifies urban heat stress hotspots, quantifies key drivers of urban heating, and generates optimized scenario-based cooling interventions — backed by physics-informed decision-making.
@@ -7,7 +7,7 @@ A geospatial AI/ML system that identifies urban heat stress hotspots, quantifies
 
 ---
 
-## 🏗️ Architecture Overview
+##Architecture Overview
 
 ```mermaid
 graph TD
@@ -35,7 +35,7 @@ graph TD
 
 ---
 
-## 🏙️ Cities Covered
+##Cities Covered
 | City | Climate Zone | Data Period | Population | description |
 |------|-------------|-------------|------------|-------------|
 | **Hyderabad** | Semi-arid | Apr–Jun 2025 | 10.5M | Fastest-growing tech hub with significant UHI effects in the HITEC City and Secunderabad corridors. |
@@ -45,7 +45,7 @@ graph TD
 
 ---
 
-## 📍 Dashboard Interface Controls
+##Dashboard Interface Controls
 
 ### 1. Planning Bar (Top Controls)
 - **Location Type**: Switch between `Preset City` (4 predefined cities) or `Custom Location` (anywhere in India via coordinates).
@@ -55,15 +55,15 @@ graph TD
 
 ### 2. Sidebar Environmental Drivers (Real-time Sliders)
 Adjust parameters to simulate custom microclimate scenarios:
-- 🌿 **NDVI** (Normalized Difference Vegetation Index): Healthy green cover. Higher = cools via shading & evapotranspiration.
-- 💧 **NDWI** (Normalized Difference Water Index): Surface water/moisture. Higher = cools via evaporation.
-- 🏗️ **NDBI** (Normalized Difference Built-up Index): Concrete/pavement density. Higher = traps heat.
-- ☀️ **Albedo** (Surface Reflectivity): Solar reflection. Lower = absorbs solar radiation, increasing LST.
-- 🌊 **MNDWI** (Modified NDWI): Noise-free urban water index for identifying lakes and rivers.
+- **NDVI** (Normalized Difference Vegetation Index): Healthy green cover. Higher = cools via shading & evapotranspiration.
+- **NDWI** (Normalized Difference Water Index): Surface water/moisture. Higher = cools via evaporation.
+- **NDBI** (Normalized Difference Built-up Index): Concrete/pavement density. Higher = traps heat.
+- **Albedo** (Surface Reflectivity): Solar reflection. Lower = absorbs solar radiation, increasing LST.
+- **MNDWI** (Modified NDWI): Noise-free urban water index for identifying lakes and rivers.
 
 ---
 
-## 📊 Comprehensive Feature Walkthrough
+##Comprehensive Feature Walkthrough
 
 ### 1. Simulation Dashboard Tab
 This is the core workspace containing:
@@ -74,13 +74,13 @@ This is the core workspace containing:
   - 🟠 `32–35°C` — High risk
   - 🔴 `> 35°C` — Extreme risk (Outdoor work dangerous)
 - **Interactive Geospatial Heatmap**: Folium heatmap overlay representing LST distribution on a 60x60 grid with satellite and dark map toggle controls.
-- **🎯 Top 3 Priority Intervention Zones**: Automatically isolates the 3 highest temperature hotspots in the city coordinates for priority cooling projects.
+- **Top 3 Priority Intervention Zones**: Automatically isolates the 3 highest temperature hotspots in the city coordinates for priority cooling projects.
 - **Upcoming Mitigation Projects**: Selectable preset cards to run simulations:
-  - 🌳 *Plant Urban Forest* (NDVI +0.15, NDBI -0.05)
-  - 🏗️ *Install Cool Roofs* (NDWI +0.05, NDBI -0.10)
-  - 🌊 *Restore Water Body* (NDWI +0.12, NDBI -0.03)
-- **🌱 Quantified Savings Card**: Computes daily cooling energy savings (MWh/day), avoided carbon emissions (tCO₂/yr), and financial cost savings (Lakhs/yr) across a 10 km² zone using EPA and Indian power tariff models.
-- **🔍 SHAP Feature Attribution**: Interactive bar chart displaying feature contributions pushing temperatures up (saffron/warming) or down (cyan/cooling).
+  -  *Plant Urban Forest* (NDVI +0.15, NDBI -0.05)
+  -  *Install Cool Roofs* (NDWI +0.05, NDBI -0.10)
+  -  *Restore Water Body* (NDWI +0.12, NDBI -0.03)
+- **Quantified Savings Card**: Computes daily cooling energy savings (MWh/day), avoided carbon emissions (tCO₂/yr), and financial cost savings (Lakhs/yr) across a 10 km² zone using EPA and Indian power tariff models.
+- **SHAP Feature Attribution**: Interactive bar chart displaying feature contributions pushing temperatures up (saffron/warming) or down (cyan/cooling).
 - **📄 Downloadable Analysis Report**: Generates and downloads a complete plain-text diagnostics report with model parameters, SHAP rankings, and action items.
 
 ### 2. City Comparison Tab
@@ -95,7 +95,7 @@ Compares Hyderabad, Delhi, Mumbai, and Chennai side-by-side:
 
 ---
 
-## 🏆 Recommended Judge Demo Flow
+##Recommended Judge Demo Flow
 1. **Onboarding**: Start at the **How to Use** tab to show the structural setup guide.
 2. **Geospatial Hotspots**: Go to **Simulation Dashboard** and select **Hyderabad** -> Point out the ** Folium Heatmap** and the **🎯 Top 3 Priority Intervention Zones** dynamically extracted below the map.
 3. **Run Interventions**: Click **"Simulate Urban Forest"** -> Watch LST metrics decrease and review the **🌱 Quantified Savings** card showing MWh energy saved and carbon offset.
@@ -130,7 +130,7 @@ Make sure the following files are in the root directory:
 
 ---
 
-## 📁 Repository Structure
+##Repository Structure
 ```
 ├── app.py                        # Streamlit dashboard application
 ├── xgb_model.pkl                 # Trained XGBoost model binary
@@ -147,7 +147,7 @@ Make sure the following files are in the root directory:
 
 ---
 
-## 🔬 System Pipeline & Validation
+##System Pipeline & Validation
 
 ### Layer 1 — Data Pipeline (Google Earth Engine)
 - **Landsat 8/9 C02 T1 L2**: Surface Temperature (ST_B10) & spectral bands.
