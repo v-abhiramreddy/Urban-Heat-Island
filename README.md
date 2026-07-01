@@ -74,12 +74,12 @@ This is the core workspace containing:
   - 🟠 `32–35°C` — High risk
   - 🔴 `> 35°C` — Extreme risk (Outdoor work dangerous)
 - **Interactive Geospatial Heatmap**: Folium heatmap overlay representing LST distribution on a 60x60 grid with satellite and dark map toggle controls.
-- **Top 3 Priority Intervention Zones**: Automatically isolates the 3 highest temperature hotspots in the city coordinates for priority cooling projects.
+- ** Top 3 Priority Intervention Zones**: Automatically isolates the 3 highest temperature hotspots in the city coordinates for priority cooling projects.
 - **Upcoming Mitigation Projects**: Selectable preset cards to run simulations:
-  -  *Plant Urban Forest* (NDVI +0.15, NDBI -0.05)
-  -  *Install Cool Roofs* (NDWI +0.05, NDBI -0.10)
-  -  *Restore Water Body* (NDWI +0.12, NDBI -0.03)
-- **Quantified Savings Card**: Computes daily cooling energy savings (MWh/day), avoided carbon emissions (tCO₂/yr), and financial cost savings (Lakhs/yr) across a 10 km² zone using EPA and Indian power tariff models.
+  -  * Plant Urban Forest* (NDVI +0.15, NDBI -0.05)
+  -  * Install Cool Roofs* (NDWI +0.05, NDBI -0.10)
+  -  * Restore Water Body* (NDWI +0.12, NDBI -0.03)
+- ** Quantified Savings Card**: Computes daily cooling energy savings (MWh/day), avoided carbon emissions (tCO₂/yr), and financial cost savings (Lakhs/yr) across a 10 km² zone using EPA and Indian power tariff models.
 - **SHAP Feature Attribution**: Interactive bar chart displaying feature contributions pushing temperatures up (saffron/warming) or down (cyan/cooling).
 - **Downloadable Analysis Report**: Generates and downloads a complete plain-text diagnostics report with model parameters, SHAP rankings, and action items.
 
